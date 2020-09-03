@@ -1,0 +1,82 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "VYV Audit API",
+    "x-lastModified": "18 June 2020 12:27:13 pm (Central European Summer Time)"
+  },
+  "paths": {
+    "/audit-safe": {
+      "post": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "schema": {
+              "$ref": "#/definitions/audit_200"
+            },
+            "examples": {
+              "application/json": {
+                "tas_event_id": "event-id"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Audit Input",
+            "schema": {
+              "$ref": "#/definitions/audit_input"
+            }
+          }
+        ],
+        "operationId": "postAudit-safe",
+        "summary": "Audit Safe",
+        "description": "Ajouter une ligne d'audit",
+        "consumes": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "audit_input": {
+      "type": "object",
+      "properties": {
+        "transacion-id": {
+          "type": "string",
+          "default": "ABC-12"
+        },
+        "audit-event": {
+          "type": "string",
+          "default": "event"
+        },
+        "event-description": {
+          "type": "string",
+          "default": "Adherent 123 demande"
+        },
+        "event-source": {
+          "type": "string",
+          "default": "BPM"
+        },
+        "payload": {
+          "type": "string",
+          "default": "donnees bruts"
+        }
+      }
+    },
+    "audit_200": {
+      "type": "object",
+      "properties": {
+        "tas_event_id": {
+          "type": "string",
+          "default": "event-id"
+        }
+      }
+    }
+  }
+}

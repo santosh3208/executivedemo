@@ -1,0 +1,55 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "VYV - BPM State",
+    "x-lastModified": "18 June 2020 3:03:11 pm (Central European Summer Time)",
+    "description": "Query BPM State"
+  },
+  "paths": {
+    "/bpm-state": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "schema": {
+              "$ref": "#/definitions/bpmstate_200"
+            },
+            "examples": {
+              "application/json": {
+                "state": "etat dossier"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "reference-dossier",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "type": "string",
+            "format": ""
+          }
+        ],
+        "operationId": "getBpm-state",
+        "summary": "Get BPM State",
+        "description": "Get BPM State"
+      }
+    }
+  },
+  "definitions": {
+    "bpmstate_200": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "default": "etat dossier"
+        }
+      }
+    }
+  }
+}

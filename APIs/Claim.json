@@ -1,0 +1,82 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "VYV - Demande Indemnisation",
+    "x-lastModified": "17 June 2020 4:46:09 pm (Central European Summer Time)",
+    "description": "API d'indemnisation"
+  },
+  "paths": {
+    "/indemnisation": {
+      "post": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "schema": {
+              "$ref": "#/definitions/indemnisation_200"
+            },
+            "examples": {
+              "application/json": {
+                "reference-dossier": "XXXX"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Indemnisation payload",
+            "schema": {
+              "$ref": "#/definitions/Indemnisation_in"
+            }
+          }
+        ],
+        "operationId": "postIndemnisation",
+        "consumes": [
+          "application/json"
+        ],
+        "summary": "Demande d'indemnisation"
+      }
+    }
+  },
+  "definitions": {
+    "Indemnisation_in": {
+      "type": "object",
+      "properties": {
+        "numero-adherent": {
+          "type": "string",
+          "default": "ABC-123-L"
+        },
+        "nom": {
+          "type": "string",
+          "default": "Kanaan"
+        },
+        "prenom": {
+          "type": "string",
+          "default": "Nadim"
+        },
+        "type-accident": {
+          "type": "string",
+          "default": "Accident domestique or Accident sportif or Accident de la route"
+        },
+        "duree-en-jour": {
+          "type": "integer",
+          "default": 10
+        }
+      }
+    },
+    "indemnisation_200": {
+      "type": "object",
+      "properties": {
+        "reference-dossier": {
+          "type": "string",
+          "default": "XXXX"
+        }
+      }
+    }
+  }
+}
