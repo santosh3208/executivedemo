@@ -1,0 +1,496 @@
+{
+    "imports": [
+        "github.com/project-flogo/flow",
+        "git.tibco.com/git/product/ipaas/wi-postgres.git/src/app/PostgreSQL/activity/insert",
+        "git.tibco.com/git/product/ipaas/wi-postgres.git/src/app/PostgreSQL/activity/query",
+        "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/activity/rest",
+        "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/activity/httpresponse",
+        "github.com/project-flogo/contrib/activity/actreturn",
+        "rest_1 git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/trigger/rest",
+        "github.com/project-flogo/contrib/function/array",
+        "github.com/project-flogo/contrib/function/datetime",
+        "github.com/project-flogo/contrib/function/string",
+        "git.tibco.com/git/product/ipaas/wi-postgres.git/src/app/PostgreSQL/connector/connection"
+    ],
+    "name": "PaymentAPI",
+    "description": "",
+    "version": {
+        "semVer": "4.0.0"
+    },
+    "type": "flogo:app",
+    "appModel": "1.1.1",
+    "triggers": [
+        {
+            "ref": "#rest_1",
+            "name": "tibco-wi-rest",
+            "description": "Simple REST Trigger",
+            "settings": {
+                "port": 9999,
+                "APISpecUpdate": true,
+                "swagger": {
+                    "filename": "ClaimsAPIs.json",
+                    "content": "data:application/json;base64,eyJzd2FnZ2VyIjoiMi4wIiwiaW5mbyI6eyJ2ZXJzaW9uIjoiMS4wIiwidGl0bGUiOiJDbGFpbXNBUElzIiwieC1sYXN0TW9kaWZpZWQiOiIyMDIwLTA3LTE5VDExOjUxOjUzLjAwMFoifSwicGF0aHMiOnsiL2NsYWltcyI6eyJwb3N0Ijp7InByb2R1Y2VzIjpbImFwcGxpY2F0aW9uL2pzb24iXSwicmVzcG9uc2VzIjp7IjIwMCI6eyJkZXNjcmlwdGlvbiI6IlN1Y2Nlc3MgcmVzcG9uc2UiLCJzY2hlbWEiOnsiJHJlZiI6IiMvZGVmaW5pdGlvbnMvb3BzIn19fSwicGFyYW1ldGVycyI6W3sibmFtZSI6ImJvZHkiLCJpbiI6ImJvZHkiLCJkZXNjcmlwdGlvbiI6IiIsInNjaGVtYSI6eyIkcmVmIjoiIy9kZWZpbml0aW9ucy9HaXZlTmV3U2NoZW1hTmFtZUhlcmUifX1dLCJvcGVyYXRpb25JZCI6InBvc3RDbGFpbXMiLCJjb25zdW1lcyI6WyJhcHBsaWNhdGlvbi9qc29uIl19fX0sImRlZmluaXRpb25zIjp7IkdpdmVOZXdTY2hlbWFOYW1lSGVyZSI6eyJ0eXBlIjoib2JqZWN0IiwicHJvcGVydGllcyI6eyJjdXN0b21lcmlkIjp7InR5cGUiOiJzdHJpbmciLCJkZWZhdWx0IjoiU3RyaW5nIn0sIkNhc2VSZWYiOnsidHlwZSI6InN0cmluZyIsImRlZmF1bHQiOiJzdHJpbmcifSwicG9saWN5aWQiOnsidHlwZSI6InN0cmluZyIsImRlZmF1bHQiOiJzdHJpbmcifSwiZGF0ZSI6eyJ0eXBlIjoic3RyaW5nIiwiZGVmYXVsdCI6IiBzdHJpbmcifSwibm9vZmRheXMiOnsidHlwZSI6ImludGVnZXIiLCJkZWZhdWx0IjoxMn0sIkFtb3VudCI6eyJ0eXBlIjoiaW50ZWdlciIsImRlZmF1bHQiOjMzfX19LCJvcHMiOnsiY2xhaW1pZCI6InN0cmluZyJ9fX0="
+                },
+                "secureConnection": false,
+                "serverKey": "",
+                "caCertificate": ""
+            },
+            "id": "ReceiveHTTPMessage",
+            "handlers": [
+                {
+                    "description": "",
+                    "settings": {
+                        "APISpecPath": "/claims",
+                        "Method": "POST",
+                        "Path": "/claims",
+                        "OutputValidation": false
+                    },
+                    "action": {
+                        "ref": "github.com/project-flogo/flow",
+                        "settings": {
+                            "flowURI": "res://flow:postClaims_POST"
+                        },
+                        "input": {
+                            "body": "=$.body"
+                        },
+                        "output": {
+                            "responseBody": {
+                                "mapping": {
+                                    "body": "=$.responseBody.body"
+                                }
+                            }
+                        }
+                    },
+                    "reply": {
+                        "code": 200,
+                        "configureResponseCodes": true,
+                        "message": ""
+                    },
+                    "schemas": {
+                        "reply": {
+                            "responseBody": {
+                                "type": "json",
+                                "value": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}}",
+                                "fe_metadata": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}}"
+                            },
+                            "responseCodesSchema": {
+                                "type": "json",
+                                "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"code\":{\"type\":\"number\"},\"responseType\":{\"type\":\"string\"},\"responseSchema\":{\"type\":\"string\"}}}}",
+                                "fe_metadata": "[{\"code\":200,\"responseType\":\"object\",\"responseSchema\":\"{\\\"claimid\\\":\\\"string\\\"}\"}]"
+                            }
+                        },
+                        "output": {
+                            "body": {
+                                "type": "json",
+                                "value": "{\"type\":\"object\",\"properties\":{\"customerid\":{\"type\":\"string\",\"default\":\"String\"},\"CaseRef\":{\"type\":\"string\",\"default\":\"string\"},\"policyid\":{\"type\":\"string\",\"default\":\"string\"},\"date\":{\"type\":\"string\",\"default\":\" string\"},\"noofdays\":{\"type\":\"integer\",\"default\":12},\"Amount\":{\"type\":\"integer\",\"default\":33}}}",
+                                "fe_metadata": "{\"type\":\"object\",\"properties\":{\"customerid\":{\"type\":\"string\",\"default\":\"String\"},\"CaseRef\":{\"type\":\"string\",\"default\":\"string\"},\"policyid\":{\"type\":\"string\",\"default\":\"string\"},\"date\":{\"type\":\"string\",\"default\":\" string\"},\"noofdays\":{\"type\":\"integer\",\"default\":12},\"Amount\":{\"type\":\"integer\",\"default\":33}}}"
+                            }
+                        }
+                    },
+                    "name": "postClaims_POST"
+                }
+            ]
+        }
+    ],
+    "resources": [
+        {
+            "id": "flow:postClaims_POST",
+            "data": {
+                "name": "postClaims_POST",
+                "description": "",
+                "links": [
+                    {
+                        "id": 1,
+                        "from": "PostgreSQLInsert",
+                        "to": "PostgreSQLQuery",
+                        "type": "default"
+                    },
+                    {
+                        "id": 2,
+                        "from": "PostgreSQLQuery",
+                        "to": "InvokeRESTService",
+                        "type": "default"
+                    },
+                    {
+                        "id": 3,
+                        "from": "InvokeRESTService",
+                        "to": "ConfigureHTTPResponse",
+                        "type": "default"
+                    },
+                    {
+                        "id": 4,
+                        "from": "ConfigureHTTPResponse",
+                        "to": "Return",
+                        "type": "default"
+                    }
+                ],
+                "tasks": [
+                    {
+                        "id": "PostgreSQLInsert",
+                        "name": "PostgreSQLInsert",
+                        "description": "This activity executes insert on a PostgreSQL database",
+                        "activity": {
+                            "ref": "#insert",
+                            "input": {
+                                "Connection": "conn://cd70dbc0-8780-11e9-bb51-f96ad411ccc8",
+                                "QueryName": "",
+                                "Query": "INSERT INTO public.claims(\n\tcase_reference, customerid, policyid, noofdays, amount, start_date)\n\tVALUES (?case_reference, ?customerid, ?policyid, ?noofdays, ?amount, ?start_date);",
+                                "manualmode": false,
+                                "Fields": [
+                                    {
+                                        "FieldName": "customerid",
+                                        "Type": "TEXT",
+                                        "Selected": false,
+                                        "Parameter": true,
+                                        "isEditable": false,
+                                        "Ordinal": 1,
+                                        "Value": true
+                                    },
+                                    {
+                                        "FieldName": "policyid",
+                                        "Type": "TEXT",
+                                        "Selected": false,
+                                        "Parameter": true,
+                                        "isEditable": false,
+                                        "Ordinal": 2,
+                                        "Value": true
+                                    },
+                                    {
+                                        "FieldName": "noofdays",
+                                        "Type": "NUMERIC",
+                                        "Selected": false,
+                                        "Parameter": true,
+                                        "isEditable": false,
+                                        "Ordinal": 3,
+                                        "Value": true
+                                    },
+                                    {
+                                        "FieldName": "amount",
+                                        "Type": "NUMERIC",
+                                        "Selected": false,
+                                        "Parameter": true,
+                                        "isEditable": false,
+                                        "Ordinal": 4,
+                                        "Value": true
+                                    },
+                                    {
+                                        "FieldName": "start_date",
+                                        "Type": "DATE",
+                                        "Selected": false,
+                                        "Parameter": true,
+                                        "isEditable": false,
+                                        "Ordinal": 8,
+                                        "Value": true
+                                    },
+                                    {
+                                        "FieldName": "case_reference",
+                                        "Type": "TEXT",
+                                        "Selected": false,
+                                        "Parameter": true,
+                                        "isEditable": false,
+                                        "Ordinal": 9,
+                                        "Value": true
+                                    }
+                                ],
+                                "RuntimeQuery": "",
+                                "State": "1d1f09bf-5d5d-4f23-8a89-886b7f0902dcINSERT INTO public.claims(\n\tcase_reference, customerid, policyid, noofdays, amount, start_date)\n\tVALUES (?case_reference, ?customerid, ?policyid, ?noofdays, ?amount, ?start_date);",
+                                "input": {
+                                    "mapping": {
+                                        "values": [
+                                            {
+                                                "customerid": "=$flow.body.customerid",
+                                                "policyid": "=$flow.body.policyid",
+                                                "noofdays": "=$flow.body.noofdays",
+                                                "amount": "=$flow.body.Amount",
+                                                "start_date": "=datetime.currentDate()",
+                                                "case_reference": "=$flow.body.CaseRef"
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "schemas": {
+                                "input": {
+                                    "input": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"definitions\":{},\"properties\":{\"values\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"customerid\":{\"type\":\"string\"},\"policyid\":{\"type\":\"string\"},\"noofdays\":{\"type\":\"number\"},\"amount\":{\"type\":\"number\"},\"start_date\":{\"type\":\"string\",\"format\":\"date\"},\"case_reference\":{\"type\":\"string\"}}}},\"parameters\":{\"type\":\"object\",\"properties\":{}}}}",
+                                        "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"definitions\":{},\"properties\":{\"values\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"customerid\":{\"type\":\"string\"},\"policyid\":{\"type\":\"string\"},\"noofdays\":{\"type\":\"number\"},\"amount\":{\"type\":\"number\"},\"start_date\":{\"type\":\"string\",\"format\":\"date\"},\"case_reference\":{\"type\":\"string\"}}}},\"parameters\":{\"type\":\"object\",\"properties\":{}}}}"
+                                    }
+                                },
+                                "output": {
+                                    "Output": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"definitions\":{},\"properties\":{\"records\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{}}}}}",
+                                        "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"definitions\":{},\"properties\":{\"records\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{}}}}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "PostgreSQLQuery",
+                        "name": "PostgreSQLQuery",
+                        "description": "This activity executes query on a PostgreSQL database",
+                        "activity": {
+                            "ref": "#query",
+                            "input": {
+                                "Connection": "conn://cd70dbc0-8780-11e9-bb51-f96ad411ccc8",
+                                "QueryName": "",
+                                "Query": "select claimid from public.claims where case_reference=?case_ref;",
+                                "manualmode": false,
+                                "Fields": [
+                                    {
+                                        "FieldName": "case_ref",
+                                        "Type": "TEXT",
+                                        "Selected": false,
+                                        "Parameter": true,
+                                        "isEditable": false,
+                                        "Ordinal": 0
+                                    },
+                                    {
+                                        "FieldName": "claimid",
+                                        "Type": "TEXT",
+                                        "Selected": true,
+                                        "Parameter": false,
+                                        "isEditable": false,
+                                        "Ordinal": 7
+                                    }
+                                ],
+                                "RuntimeQuery": "",
+                                "State": "cffd641f-bd80-4a46-93ee-e86df090cb81select claimid from public.claims where case_reference=?case_ref;",
+                                "input": {
+                                    "mapping": {
+                                        "parameters": {
+                                            "case_ref": "=$flow.body.CaseRef"
+                                        }
+                                    }
+                                }
+                            },
+                            "schemas": {
+                                "input": {
+                                    "input": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"definitions\":{},\"properties\":{\"parameters\":{\"type\":\"object\",\"properties\":{\"case_ref\":{\"type\":\"string\"}}}}}",
+                                        "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"definitions\":{},\"properties\":{\"parameters\":{\"type\":\"object\",\"properties\":{\"case_ref\":{\"type\":\"string\"}}}}}"
+                                    }
+                                },
+                                "output": {
+                                    "Output": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"definitions\":{},\"properties\":{\"records\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"claimid\":{\"type\":\"string\"}}}}}}",
+                                        "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"definitions\":{},\"properties\":{\"records\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"claimid\":{\"type\":\"string\"}}}}}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "InvokeRESTService",
+                        "name": "InvokeRESTService",
+                        "description": "Simple REST Activity",
+                        "settings": {
+                            "retryOnError": {
+                                "count": 0,
+                                "interval": 0
+                            }
+                        },
+                        "activity": {
+                            "ref": "#rest",
+                            "input": {
+                                "enableASR": true,
+                                "serviceName": "tcius-M2pnNmQ2cTJlcmtrYmN1NG9sb2NiaDZ0NzViMnU3c3M",
+                                "resourcePath": "/audit-safe",
+                                "Method": "POST",
+                                "Uri": "/gsbc/TIB_SUB_01BB7EMJE7SVVCKZ15RWG95ESF/tci/3jg6d6q2erkkbcu4olocbh6t75b2u7ss",
+                                "Timeout": 0,
+                                "requestType": "application/json",
+                                "Use certificate for verification": false,
+                                "Server Certificate": "",
+                                "proxy": "",
+                                "host": "",
+                                "body": {
+                                    "mapping": {
+                                        "audit-event": "Sent for Payment",
+                                        "event-description": "=string.concat(\"Payment to the member  \", $flow.body.customerid, \"for the policy id  \", $flow.body.policyid)",
+                                        "event-source": "ESB",
+                                        "status": "In Progress",
+                                        "transacion-id": "=$flow.body.CaseRef"
+                                    }
+                                }
+                            },
+                            "output": {
+                                "configureResponseCodes": true,
+                                "responseType": "application/json"
+                            },
+                            "schemas": {
+                                "input": {
+                                    "serviceMetadata": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"serviceId\":{\"type\":\"string\"},\"title\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"lastModifiedTime\":{\"type\":\"number\"},\"swaggerChecksum\":{\"type\":\"string\"},\"assurance\":{\"type\":\"string\"},\"intercom\":{\"type\":\"boolean\"},\"intercomRegion\":{\"type\":\"string\"},\"extAuthz\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}},\"path\":{\"type\":\"string\"},\"baseURL\":{\"type\":\"string\"},\"apiSpec\":{\"type\":\"object\",\"properties\":{\"definitions\":{\"type\":\"object\",\"properties\":{\"schema1\":{\"type\":\"object\",\"properties\":{\"properties\":{\"type\":\"object\",\"properties\":{\"audit-event\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"event-description\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"event-source\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"payload\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"status\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"transacion-id\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}}},\"type\":{\"type\":\"string\"}}},\"schema2\":{\"type\":\"object\",\"properties\":{\"properties\":{\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}}},\"type\":{\"type\":\"string\"}}}}},\"info\":{\"type\":\"object\",\"properties\":{\"description\":{\"type\":\"string\"},\"title\":{\"type\":\"string\"},\"version\":{\"type\":\"string\"}}},\"paths\":{\"type\":\"object\",\"properties\":{\"/audit-safe\":{\"type\":\"object\",\"properties\":{\"post\":{\"type\":\"object\",\"properties\":{\"operationId\":{\"type\":\"string\"},\"parameters\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"description\":{\"type\":\"string\"},\"in\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"required\":{\"type\":\"boolean\"},\"schema\":{\"type\":\"object\",\"properties\":{\"properties\":{\"type\":\"object\",\"properties\":{\"audit-event\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"event-description\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"event-source\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"payload\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"status\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"transacion-id\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}}},\"type\":{\"type\":\"string\"}}}}}},\"responses\":{\"type\":\"object\",\"properties\":{\"200\":{\"type\":\"object\",\"properties\":{\"schema\":{\"type\":\"object\",\"properties\":{\"properties\":{\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}}},\"type\":{\"type\":\"string\"}}}}}}},\"summary\":{\"type\":\"string\"}}}}}}},\"swagger\":{\"type\":\"string\"},\"host\":{\"type\":\"string\"},\"schemes\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}},\"basePath\":{\"type\":\"string\"}}}}}",
+                                        "fe_metadata": "{\"serviceId\":\"tcius-M2pnNmQ2cTJlcmtrYmN1NG9sb2NiaDZ0NzViMnU3c3M\",\"title\":\"AuditSafeAPI\",\"description\":\" \",\"lastModifiedTime\":1595496967292,\"swaggerChecksum\":\"ab5c2ccc5061fddcd40317b807d65f930c9774df5a856d8e125a8a9750036dae\",\"assurance\":\"published\",\"intercom\":true,\"intercomRegion\":\"us-west-2\",\"extAuthz\":[\"tenant-basic\"],\"path\":\"/gsbc/TIB_SUB_01BB7EMJE7SVVCKZ15RWG95ESF/tci/3jg6d6q2erkkbcu4olocbh6t75b2u7ss\",\"baseURL\":\"https://integration.cloud.tibcoapps.com\",\"apiSpec\":{\"definitions\":{\"schema1\":{\"properties\":{\"audit-event\":{\"default\":\"event\",\"type\":\"string\"},\"event-description\":{\"default\":\"Adherent 123 demande\",\"type\":\"string\"},\"event-source\":{\"default\":\"BPM\",\"type\":\"string\"},\"payload\":{\"default\":\"donnees bruts\",\"type\":\"string\"},\"status\":{\"default\":\"\",\"type\":\"string\"},\"transacion-id\":{\"default\":\"ABC-12\",\"type\":\"string\"}},\"type\":\"object\"},\"schema2\":{\"properties\":{\"tas_event_id\":{\"default\":\"event-id\",\"type\":\"string\"}},\"type\":\"object\"}},\"info\":{\"description\":\" \",\"title\":\"AuditSafeAPI\",\"version\":\"1.0.0\"},\"paths\":{\"/audit-safe\":{\"post\":{\"operationId\":\"post_audit-safe\",\"parameters\":[{\"description\":\"request body parameter\",\"in\":\"body\",\"name\":\"body\",\"required\":true,\"schema\":{\"properties\":{\"audit-event\":{\"default\":\"event\",\"type\":\"string\"},\"event-description\":{\"default\":\"Adherent 123 demande\",\"type\":\"string\"},\"event-source\":{\"default\":\"BPM\",\"type\":\"string\"},\"payload\":{\"default\":\"donnees bruts\",\"type\":\"string\"},\"status\":{\"default\":\"\",\"type\":\"string\"},\"transacion-id\":{\"default\":\"ABC-12\",\"type\":\"string\"}},\"type\":\"object\"}}],\"responses\":{\"200\":{\"schema\":{\"properties\":{\"tas_event_id\":{\"default\":\"event-id\",\"type\":\"string\"}},\"type\":\"object\"}}},\"summary\":\"postAudit-safe_POST\"}}},\"swagger\":\"2.0\",\"host\":\"integration.cloud.tibcoapps.com\",\"schemes\":[\"https\"],\"basePath\":\"/gsbc/TIB_SUB_01BB7EMJE7SVVCKZ15RWG95ESF/tci/3jg6d6q2erkkbcu4olocbh6t75b2u7ss\"}}"
+                                    },
+                                    "queryParams": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{}}",
+                                        "fe_metadata": "[]"
+                                    },
+                                    "pathParams": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{}}",
+                                        "fe_metadata": "[]"
+                                    },
+                                    "headers": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{}}",
+                                        "fe_metadata": "[]"
+                                    },
+                                    "body": {
+                                        "type": "json",
+                                        "value": "{\"properties\":{\"audit-event\":{\"default\":\"event\",\"type\":\"string\"},\"event-description\":{\"default\":\"Adherent 123 demande\",\"type\":\"string\"},\"event-source\":{\"default\":\"BPM\",\"type\":\"string\"},\"payload\":{\"default\":\"donnees bruts\",\"type\":\"string\"},\"status\":{\"default\":\"\",\"type\":\"string\"},\"transacion-id\":{\"default\":\"ABC-12\",\"type\":\"string\"}},\"type\":\"object\"}",
+                                        "fe_metadata": "{\"properties\":{\"audit-event\":{\"default\":\"event\",\"type\":\"string\"},\"event-description\":{\"default\":\"Adherent 123 demande\",\"type\":\"string\"},\"event-source\":{\"default\":\"BPM\",\"type\":\"string\"},\"payload\":{\"default\":\"donnees bruts\",\"type\":\"string\"},\"status\":{\"default\":\"\",\"type\":\"string\"},\"transacion-id\":{\"default\":\"ABC-12\",\"type\":\"string\"}},\"type\":\"object\"}"
+                                    }
+                                },
+                                "output": {
+                                    "responseCodes": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"200\":{\"properties\":{\"tas_event_id\":{\"default\":\"event-id\",\"type\":\"string\"}},\"type\":\"object\"}}}",
+                                        "fe_metadata": "{\"type\":\"object\",\"properties\":{\"200\":{\"properties\":{\"tas_event_id\":{\"default\":\"event-id\",\"type\":\"string\"}},\"type\":\"object\"}}}"
+                                    },
+                                    "responseCodesSchema": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"code\":{\"type\":\"number\"},\"responseType\":{\"type\":\"string\"},\"responseSchema\":{\"type\":\"string\"}}}}",
+                                        "fe_metadata": "[{\"code\":200,\"responseType\":\"object\",\"responseSchema\":\"{\\\"properties\\\":{\\\"tas_event_id\\\":{\\\"default\\\":\\\"event-id\\\",\\\"type\\\":\\\"string\\\"}},\\\"type\\\":\\\"object\\\"}\"}]"
+                                    },
+                                    "headers": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"Accept\":{\"type\":\"string\",\"visible\":false},\"Accept-Charset\":{\"type\":\"string\",\"visible\":false},\"Accept-Encoding\":{\"type\":\"string\",\"visible\":false},\"Content-Type\":{\"type\":\"string\",\"visible\":false},\"Content-Length\":{\"type\":\"string\",\"visible\":false},\"Connection\":{\"type\":\"string\",\"visible\":false},\"Cookie\":{\"type\":\"string\",\"visible\":false},\"Pragma\":{\"type\":\"string\",\"visible\":false}},\"required\":[]}",
+                                        "fe_metadata": "[{\"parameterName\":\"Accept\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Accept-Charset\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Accept-Encoding\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Content-Type\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Content-Length\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Connection\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Cookie\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Pragma\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false}]"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "ConfigureHTTPResponse",
+                        "name": "ConfigureHTTPResponse",
+                        "description": "Configure HTTP Response Activity",
+                        "activity": {
+                            "ref": "#httpresponse",
+                            "input": {
+                                "trigger": "",
+                                "responsecode": "200",
+                                "input": {
+                                    "mapping": {
+                                        "body": {
+                                            "claimid": "=$activity[PostgreSQLQuery].Output"
+                                        }
+                                    }
+                                }
+                            },
+                            "schemas": {
+                                "input": {
+                                    "input": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"claimid\":{\"type\":\"string\"}}}}}",
+                                        "fe_metadata": "{\"body\":{\"claimid\":\"string\"}}"
+                                    }
+                                },
+                                "output": {
+                                    "response": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"claimid\":{\"type\":\"string\"}}}}}",
+                                        "fe_metadata": "{\"body\":{\"claimid\":\"string\"}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "Return",
+                        "name": "Return",
+                        "description": "Simple Return Activity",
+                        "activity": {
+                            "ref": "#actreturn"
+                        }
+                    }
+                ],
+                "metadata": {
+                    "input": [
+                        {
+                            "name": "body",
+                            "type": "object",
+                            "schema": {
+                                "type": "json",
+                                "value": "{\"customerid\":{\"type\":\"string\",\"default\":\"String\"},\"CaseRef\":{\"type\":\"string\",\"default\":\"string\"},\"policyid\":{\"type\":\"string\",\"default\":\"string\"},\"date\":{\"type\":\"string\",\"default\":\" string\"},\"noofdays\":{\"type\":\"integer\",\"default\":12},\"Amount\":{\"type\":\"integer\",\"default\":33}}"
+                            }
+                        }
+                    ],
+                    "output": [
+                        {
+                            "name": "code",
+                            "type": "integer"
+                        },
+                        {
+                            "name": "responseBody",
+                            "type": "object",
+                            "schema": {
+                                "type": "json",
+                                "value": "{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}"
+                            }
+                        }
+                    ],
+                    "fe_metadata": {
+                        "input": "{\"type\":\"object\",\"title\":\"ReceiveHTTPMessage\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"customerid\":{\"type\":\"string\",\"default\":\"String\"},\"CaseRef\":{\"type\":\"string\",\"default\":\"string\"},\"policyid\":{\"type\":\"string\",\"default\":\"string\"},\"date\":{\"type\":\"string\",\"default\":\" string\"},\"noofdays\":{\"type\":\"integer\",\"default\":12},\"Amount\":{\"type\":\"integer\",\"default\":33}}}}}",
+                        "output": "{\"type\":\"object\",\"title\":\"Inputs\",\"properties\":{\"code\":{\"type\":\"integer\",\"required\":false},\"responseBody\":{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}}},\"required\":[]}"
+                    }
+                },
+                "explicitReply": true
+            }
+        }
+    ],
+    "properties": [
+        {
+            "name": "PostgreSQL.PG.Host",
+            "type": "string",
+            "value": "postgres.cskzim8w48e3.ap-south-1.rds.amazonaws.com"
+        },
+        {
+            "name": "PostgreSQL.PG.Port",
+            "type": "float64",
+            "value": 5432
+        },
+        {
+            "name": "PostgreSQL.PG.Database_Name",
+            "type": "string",
+            "value": "postgres"
+        },
+        {
+            "name": "PostgreSQL.PG.User",
+            "type": "string",
+            "value": "postgres"
+        },
+        {
+            "name": "PostgreSQL.PG.Password",
+            "type": "string",
+            "value": "SECRET:iuhF5iJbGgr6MFPHO3wbwB0SVy5sUR3a"
+        }
+    ],
+    "connections": {
+        "cd70dbc0-8780-11e9-bb51-f96ad411ccc8": {
+            "id": "cd70dbc0-8780-11e9-bb51-f96ad411ccc8",
+            "name": "PG",
+            "ref": "#connection",
+            "settings": {
+                "name": "PG",
+                "description": "",
+                "host": "=$property[\"PostgreSQL.PG.Host\"]",
+                "port": "=$property[\"PostgreSQL.PG.Port\"]",
+                "databaseName": "=$property[\"PostgreSQL.PG.Database_Name\"]",
+                "user": "=$property[\"PostgreSQL.PG.User\"]",
+                "password": "=$property[\"PostgreSQL.PG.Password\"]"
+            }
+        }
+    },
+    "contrib": "W3sicmVmIjoiZ2l0LnRpYmNvLmNvbS9naXQvcHJvZHVjdC9pcGFhcy93aS1jb250cmliLmdpdC9jb250cmlidXRpb25zL0dlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCJ9LHsicmVmIjoiZ2l0LnRpYmNvLmNvbS9naXQvcHJvZHVjdC9pcGFhcy93aS1wb3N0Z3Jlcy5naXQvc3JjL2FwcC9Qb3N0Z3JlU1FMIiwiczNsb2NhdGlvbiI6IlRpYmNvL1Bvc3RncmVTUUwifV0=",
+    "fe_metadata": "UEsDBAoAAAAIAJBaIlGrqSRGFQAAABMAAAAIAAAAYXBwLmpzb26rViopykxPTy1yy8kvL1ayio6tBQBQSwECFAAKAAAACACQWiJRq6kkRhUAAAATAAAACAAAAAAAAAAAAAAAAAAAAAAAYXBwLmpzb25QSwUGAAAAAAEAAQA2AAAAOwAAAAAA"
+}

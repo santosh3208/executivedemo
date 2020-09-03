@@ -1,0 +1,380 @@
+{
+    "imports": [
+        "github.com/project-flogo/flow",
+        "git.tibco.com/git/product/ipaas/wi-postgres.git/src/app/PostgreSQL/activity/query",
+        "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/activity/log",
+        "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/activity/httpresponse",
+        "github.com/project-flogo/contrib/activity/actreturn",
+        "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/trigger/rest",
+        "git.tibco.com/git/product/ipaas/wi-postgres.git/src/app/PostgreSQL/connector/connection"
+    ],
+    "name": "PolicyAPI",
+    "description": "",
+    "version": {
+        "semVer": "4.0.0"
+    },
+    "type": "flogo:app",
+    "appModel": "1.1.1",
+    "triggers": [
+        {
+            "ref": "#rest",
+            "name": "tibco-wi-rest",
+            "description": "Simple REST Trigger",
+            "settings": {
+                "port": 9999,
+                "APISpecUpdate": true,
+                "swagger": {
+                    "filename": "PolicyAPIs.json",
+                    "content": "data:application/json;base64,eyJzd2FnZ2VyIjoiMi4wIiwiaW5mbyI6eyJ2ZXJzaW9uIjoiMS4wIiwidGl0bGUiOiJQb2xpY3lBUElzIiwieC1sYXN0TW9kaWZpZWQiOiIyMDIwLTA3LTE5VDE3OjAwOjI3LjAwMFoifSwicGF0aHMiOnsiL3BvbGljeS97Y3VzdG9tZXJpZH0iOnsiZ2V0Ijp7InByb2R1Y2VzIjpbImFwcGxpY2F0aW9uL2pzb24iXSwicmVzcG9uc2VzIjp7IjIwMCI6eyJkZXNjcmlwdGlvbiI6IlN1Y2Nlc3MgcmVzcG9uc2UiLCJzY2hlbWEiOnsiJHJlZiI6IiMvZGVmaW5pdGlvbnMvR2l2ZU5ld1NjaGVtYU5hbWVIZXJlIn0sImV4YW1wbGVzIjp7ImFwcGxpY2F0aW9uL2pzb24iOnsiY3VzdG9tZXJpZCI6IlN0cmluZyIsInBvbGljeUlEIjoiU3RyaW5nIiwiU3RhcnREYXRlIjoiU3RyaW5nIiwiRW5kRGF0ZSI6IlN0cmluZyIsImlzYWN0aXZlIjp0cnVlLCJQcmVtaXVtIjoiMTIxIn19fX0sInBhcmFtZXRlcnMiOlt7Im5hbWUiOiJyZWZlcmVuY2UiLCJpbiI6InF1ZXJ5IiwiZGVzY3JpcHRpb24iOiIiLCJyZXF1aXJlZCI6ZmFsc2UsInR5cGUiOiJzdHJpbmciLCJmb3JtYXQiOiIifSx7Im5hbWUiOiJjdXN0b21lcmlkIiwiaW4iOiJwYXRoIiwiZGVzY3JpcHRpb24iOiIiLCJyZXF1aXJlZCI6dHJ1ZSwidHlwZSI6InN0cmluZyIsImZvcm1hdCI6IiJ9XSwib3BlcmF0aW9uSWQiOiJnZXRDdXN0b21lclBvbGljeV9wb2xpY3lpZCJ9fX0sImRlZmluaXRpb25zIjp7InBvcCI6eyJ0eXBlIjoib2JqZWN0IiwicHJvcGVydGllcyI6eyJwb2xpY3lJRCI6eyJ0eXBlIjoic3RyaW5nIiwiZGVmYXVsdCI6IlN0cmluZyJ9LCJTdGFydERhdGUiOnsidHlwZSI6InN0cmluZyIsImRlZmF1bHQiOiJTdHJpbmcifSwiRW5kRGF0ZSI6eyJ0eXBlIjoic3RyaW5nIiwiZGVmYXVsdCI6IlN0cmluZyJ9LCJpc2FjdGl2ZSI6eyJ0eXBlIjoiYm9vbGVhbiIsImRlZmF1bHQiOnRydWV9LCJQcmVtaXVtIjp7InR5cGUiOiJzdHJpbmciLCJkZWZhdWx0IjoiMTIxIn19fSwiR2l2ZU5ld1NjaGVtYU5hbWVIZXJlIjp7InR5cGUiOiJvYmplY3QiLCJwcm9wZXJ0aWVzIjp7InBvbGljeUlEIjp7InR5cGUiOiJzdHJpbmciLCJkZWZhdWx0IjoiU3RyaW5nIn0sIlN0YXJ0RGF0ZSI6eyJ0eXBlIjoic3RyaW5nIiwiZGVmYXVsdCI6IlN0cmluZyJ9LCJFbmREYXRlIjp7InR5cGUiOiJzdHJpbmciLCJkZWZhdWx0IjoiU3RyaW5nIn0sImlzYWN0aXZlIjp7InR5cGUiOiJib29sZWFuIiwiZGVmYXVsdCI6dHJ1ZX0sIlByZW1pdW0iOnsidHlwZSI6InN0cmluZyIsImRlZmF1bHQiOiIxMjEifSwibWF4bm9vZmRheXMiOnsidHlwZSI6ImludGVnZXIiLCJkZWZhdWx0IjoyfX19fX0="
+                },
+                "secureConnection": false,
+                "serverKey": "",
+                "caCertificate": ""
+            },
+            "id": "ReceiveHTTPMessage",
+            "handlers": [
+                {
+                    "description": "",
+                    "settings": {
+                        "APISpecPath": "/policy/{customerid}",
+                        "Method": "GET",
+                        "Path": "/policy/{customerid}",
+                        "OutputValidation": false
+                    },
+                    "action": {
+                        "ref": "github.com/project-flogo/flow",
+                        "settings": {
+                            "flowURI": "res://flow:getCustomerPolicy_policyid_GET"
+                        },
+                        "input": {
+                            "queryParams": {
+                                "mapping": {
+                                    "reference": "=$.queryParams.reference"
+                                }
+                            },
+                            "pathParams": {
+                                "mapping": {
+                                    "customerid": "=$.pathParams.customerid"
+                                }
+                            }
+                        },
+                        "output": {
+                            "responseBody": {
+                                "mapping": {
+                                    "body": "=$.responseBody.body"
+                                }
+                            }
+                        }
+                    },
+                    "reply": {
+                        "code": 200,
+                        "configureResponseCodes": true,
+                        "message": ""
+                    },
+                    "schemas": {
+                        "reply": {
+                            "responseBody": {
+                                "type": "json",
+                                "value": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}}",
+                                "fe_metadata": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}}"
+                            },
+                            "responseCodesSchema": {
+                                "type": "json",
+                                "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"code\":{\"type\":\"number\"},\"responseType\":{\"type\":\"string\"},\"responseSchema\":{\"type\":\"string\"}}}}",
+                                "fe_metadata": "[{\"code\":200,\"responseType\":\"object\",\"responseSchema\":\"{\\\"type\\\":\\\"object\\\",\\\"properties\\\":{\\\"policyID\\\":{\\\"type\\\":\\\"string\\\",\\\"default\\\":\\\"String\\\"},\\\"StartDate\\\":{\\\"type\\\":\\\"string\\\",\\\"default\\\":\\\"String\\\"},\\\"EndDate\\\":{\\\"type\\\":\\\"string\\\",\\\"default\\\":\\\"String\\\"},\\\"isactive\\\":{\\\"type\\\":\\\"boolean\\\",\\\"default\\\":true},\\\"Premium\\\":{\\\"type\\\":\\\"string\\\",\\\"default\\\":\\\"121\\\"},\\\"maxnoofdays\\\":{\\\"type\\\":\\\"integer\\\",\\\"default\\\":2}}}\"}]"
+                            }
+                        },
+                        "output": {
+                            "queryParams": {
+                                "type": "json",
+                                "value": "{\"type\":\"object\",\"properties\":{\"reference\":{\"type\":\"string\"}},\"required\":[]}",
+                                "fe_metadata": "[\n  {\n    \"parameterName\": \"reference\",\n    \"repeating\": \"false\",\n    \"type\": \"string\",\n    \"required\": \"false\"\n  }\n]"
+                            },
+                            "pathParams": {
+                                "type": "json",
+                                "value": "{\"type\":\"object\",\"properties\":{\"customerid\":{\"type\":\"string\"}},\"required\":[]}",
+                                "fe_metadata": "[{\"parameterName\":\"customerid\",\"type\":\"string\"}]"
+                            }
+                        }
+                    },
+                    "name": "getCustomerPolicy_policyid_GET"
+                }
+            ]
+        }
+    ],
+    "resources": [
+        {
+            "id": "flow:getCustomerPolicy_policyid_GET",
+            "data": {
+                "name": "getCustomerPolicy_policyid_GET",
+                "description": "",
+                "links": [
+                    {
+                        "id": 1,
+                        "from": "PostgreSQLQuery",
+                        "to": "LogMessage",
+                        "type": "default"
+                    },
+                    {
+                        "id": 2,
+                        "from": "LogMessage",
+                        "to": "ConfigureHTTPResponse",
+                        "type": "default"
+                    },
+                    {
+                        "id": 3,
+                        "from": "ConfigureHTTPResponse",
+                        "to": "Return",
+                        "type": "default"
+                    }
+                ],
+                "tasks": [
+                    {
+                        "id": "PostgreSQLQuery",
+                        "name": "PostgreSQLQuery",
+                        "description": "This activity executes query on a PostgreSQL database",
+                        "activity": {
+                            "ref": "#query",
+                            "input": {
+                                "Connection": "conn://cd70dbc0-8780-11e9-bb51-f96ad411ccc8",
+                                "QueryName": "",
+                                "Query": "SELECT *\n\tFROM public.\"policies\" where customerid=?custid ;",
+                                "manualmode": false,
+                                "Fields": [
+                                    {
+                                        "FieldName": "custid",
+                                        "Type": "TEXT",
+                                        "Selected": false,
+                                        "Parameter": true,
+                                        "isEditable": false,
+                                        "Ordinal": 0
+                                    },
+                                    {
+                                        "FieldName": "customerid",
+                                        "Type": "TEXT",
+                                        "Selected": true,
+                                        "Parameter": false,
+                                        "isEditable": false,
+                                        "Ordinal": 1
+                                    },
+                                    {
+                                        "FieldName": "policyid",
+                                        "Type": "TEXT",
+                                        "Selected": true,
+                                        "Parameter": false,
+                                        "isEditable": false,
+                                        "Ordinal": 2
+                                    },
+                                    {
+                                        "FieldName": "startdate",
+                                        "Type": "TEXT",
+                                        "Selected": true,
+                                        "Parameter": false,
+                                        "isEditable": false,
+                                        "Ordinal": 3
+                                    },
+                                    {
+                                        "FieldName": "maxdays",
+                                        "Type": "NUMERIC",
+                                        "Selected": true,
+                                        "Parameter": false,
+                                        "isEditable": false,
+                                        "Ordinal": 4
+                                    },
+                                    {
+                                        "FieldName": "enddate",
+                                        "Type": "TEXT",
+                                        "Selected": true,
+                                        "Parameter": false,
+                                        "isEditable": false,
+                                        "Ordinal": 6
+                                    },
+                                    {
+                                        "FieldName": "isactive",
+                                        "Type": "TEXT",
+                                        "Selected": true,
+                                        "Parameter": false,
+                                        "isEditable": false,
+                                        "Ordinal": 7
+                                    }
+                                ],
+                                "RuntimeQuery": "",
+                                "State": "114d5acf-27c8-49a6-8808-4416ba7c4b73SELECT *\n\tFROM public.\"policies\" where customerid=?custid ;",
+                                "input": {
+                                    "mapping": {
+                                        "parameters": {
+                                            "custid": "=$flow.pathParams.customerid"
+                                        }
+                                    }
+                                }
+                            },
+                            "schemas": {
+                                "input": {
+                                    "input": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"definitions\":{},\"properties\":{\"parameters\":{\"type\":\"object\",\"properties\":{\"custid\":{\"type\":\"string\"}}}}}",
+                                        "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"definitions\":{},\"properties\":{\"parameters\":{\"type\":\"object\",\"properties\":{\"custid\":{\"type\":\"string\"}}}}}"
+                                    }
+                                },
+                                "output": {
+                                    "Output": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"definitions\":{},\"properties\":{\"records\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"customerid\":{\"type\":\"string\"},\"policyid\":{\"type\":\"string\"},\"startdate\":{\"type\":\"string\"},\"maxdays\":{\"type\":\"number\"},\"enddate\":{\"type\":\"string\"},\"isactive\":{\"type\":\"string\"}}}}}}",
+                                        "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"definitions\":{},\"properties\":{\"records\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"customerid\":{\"type\":\"string\"},\"policyid\":{\"type\":\"string\"},\"startdate\":{\"type\":\"string\"},\"maxdays\":{\"type\":\"number\"},\"enddate\":{\"type\":\"string\"},\"isactive\":{\"type\":\"string\"}}}}}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "LogMessage",
+                        "name": "LogMessage",
+                        "description": "Simple Log Message Activity",
+                        "activity": {
+                            "ref": "#log",
+                            "input": {
+                                "Log Level": "INFO",
+                                "flowInfo": false,
+                                "message": "=$activity[PostgreSQLQuery].Output.records[0].policyid"
+                            }
+                        }
+                    },
+                    {
+                        "id": "ConfigureHTTPResponse",
+                        "name": "ConfigureHTTPResponse",
+                        "description": "Configure HTTP Response Activity",
+                        "activity": {
+                            "ref": "#httpresponse",
+                            "input": {
+                                "trigger": "",
+                                "responsecode": "200",
+                                "input": {
+                                    "mapping": {
+                                        "body": "=$activity[PostgreSQLQuery].Output"
+                                    }
+                                }
+                            },
+                            "schemas": {
+                                "input": {
+                                    "input": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"policyID\":{\"type\":\"string\",\"default\":\"String\"},\"StartDate\":{\"type\":\"string\",\"default\":\"String\"},\"EndDate\":{\"type\":\"string\",\"default\":\"String\"},\"isactive\":{\"type\":\"boolean\",\"default\":true},\"Premium\":{\"type\":\"string\",\"default\":\"121\"},\"maxnoofdays\":{\"type\":\"integer\",\"default\":2}}}}}",
+                                        "fe_metadata": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"policyID\":{\"type\":\"string\",\"default\":\"String\"},\"StartDate\":{\"type\":\"string\",\"default\":\"String\"},\"EndDate\":{\"type\":\"string\",\"default\":\"String\"},\"isactive\":{\"type\":\"boolean\",\"default\":true},\"Premium\":{\"type\":\"string\",\"default\":\"121\"},\"maxnoofdays\":{\"type\":\"integer\",\"default\":2}}}}}"
+                                    }
+                                },
+                                "output": {
+                                    "response": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"policyID\":{\"type\":\"string\",\"default\":\"String\"},\"StartDate\":{\"type\":\"string\",\"default\":\"String\"},\"EndDate\":{\"type\":\"string\",\"default\":\"String\"},\"isactive\":{\"type\":\"boolean\",\"default\":true},\"Premium\":{\"type\":\"string\",\"default\":\"121\"},\"maxnoofdays\":{\"type\":\"integer\",\"default\":2}}}}}",
+                                        "fe_metadata": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"policyID\":{\"type\":\"string\",\"default\":\"String\"},\"StartDate\":{\"type\":\"string\",\"default\":\"String\"},\"EndDate\":{\"type\":\"string\",\"default\":\"String\"},\"isactive\":{\"type\":\"boolean\",\"default\":true},\"Premium\":{\"type\":\"string\",\"default\":\"121\"},\"maxnoofdays\":{\"type\":\"integer\",\"default\":2}}}}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "Return",
+                        "name": "Return",
+                        "description": "Simple Return Activity",
+                        "activity": {
+                            "ref": "#actreturn",
+                            "settings": {
+                                "mappings": {
+                                    "responseBody": {
+                                        "mapping": {
+                                            "body": "=$activity[ConfigureHTTPResponse].response.body"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "metadata": {
+                    "input": [
+                        {
+                            "name": "queryParams",
+                            "type": "object",
+                            "schema": {
+                                "type": "json",
+                                "value": "{\"reference\":{\"type\":\"string\"}}"
+                            }
+                        },
+                        {
+                            "name": "pathParams",
+                            "type": "object",
+                            "schema": {
+                                "type": "json",
+                                "value": "{\"customerid\":{\"type\":\"string\"}}"
+                            }
+                        }
+                    ],
+                    "output": [
+                        {
+                            "name": "code",
+                            "type": "integer"
+                        },
+                        {
+                            "name": "responseBody",
+                            "type": "object",
+                            "schema": {
+                                "type": "json",
+                                "value": "{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}"
+                            }
+                        }
+                    ],
+                    "fe_metadata": {
+                        "input": "{\"type\":\"object\",\"title\":\"ReceiveHTTPMessage\",\"properties\":{\"queryParams\":{\"type\":\"object\",\"properties\":{\"reference\":{\"type\":\"string\"}},\"required\":[]},\"pathParams\":{\"type\":\"object\",\"properties\":{\"customerid\":{\"type\":\"string\"}},\"required\":[]}}}",
+                        "output": "{\"type\":\"object\",\"title\":\"Inputs\",\"properties\":{\"code\":{\"type\":\"integer\",\"required\":false},\"responseBody\":{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}}},\"required\":[]}"
+                    }
+                },
+                "explicitReply": true
+            }
+        }
+    ],
+    "properties": [
+        {
+            "name": "PostgreSQL.PG.Host",
+            "type": "string",
+            "value": "postgres.cskzim8w48e3.ap-south-1.rds.amazonaws.com"
+        },
+        {
+            "name": "PostgreSQL.PG.Port",
+            "type": "float64",
+            "value": 5432
+        },
+        {
+            "name": "PostgreSQL.PG.Database_Name",
+            "type": "string",
+            "value": "postgres"
+        },
+        {
+            "name": "PostgreSQL.PG.User",
+            "type": "string",
+            "value": "postgres"
+        },
+        {
+            "name": "PostgreSQL.PG.Password",
+            "type": "string",
+            "value": "SECRET:Bw7+efUEcEmt6ZkazlXif3+4kSLUUHoZ"
+        }
+    ],
+    "connections": {
+        "cd70dbc0-8780-11e9-bb51-f96ad411ccc8": {
+            "id": "cd70dbc0-8780-11e9-bb51-f96ad411ccc8",
+            "name": "PG",
+            "ref": "#connection",
+            "settings": {
+                "name": "PG",
+                "description": "",
+                "host": "=$property[\"PostgreSQL.PG.Host\"]",
+                "port": "=$property[\"PostgreSQL.PG.Port\"]",
+                "databaseName": "=$property[\"PostgreSQL.PG.Database_Name\"]",
+                "user": "=$property[\"PostgreSQL.PG.User\"]",
+                "password": "=$property[\"PostgreSQL.PG.Password\"]"
+            }
+        }
+    },
+    "contrib": "W3sicmVmIjoiZ2l0LnRpYmNvLmNvbS9naXQvcHJvZHVjdC9pcGFhcy93aS1jb250cmliLmdpdC9jb250cmlidXRpb25zL0dlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCJ9LHsicmVmIjoiZ2l0LnRpYmNvLmNvbS9naXQvcHJvZHVjdC9pcGFhcy93aS1wb3N0Z3Jlcy5naXQvc3JjL2FwcC9Qb3N0Z3JlU1FMIiwiczNsb2NhdGlvbiI6IlRpYmNvL1Bvc3RncmVTUUwifV0=",
+    "fe_metadata": "UEsDBAoAAAAIAOdbIlGrqSRGFQAAABMAAAAIAAAAYXBwLmpzb26rViopykxPTy1yy8kvL1ayio6tBQBQSwECFAAKAAAACADnWyJRq6kkRhUAAAATAAAACAAAAAAAAAAAAAAAAAAAAAAAYXBwLmpzb25QSwUGAAAAAAEAAQA2AAAAOwAAAAAA"
+}

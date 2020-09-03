@@ -1,0 +1,108 @@
+{
+    "name": "AuditSafeAPI",
+    "description": "",
+    "version": {
+        "semVer": "4.0.0"
+    },
+    "type": "flogo",
+    "resources": {
+        "physicalMemory": 1024,
+        "totalMemory": 4096,
+        "cpuQuota": 25
+    },
+    "endpoints": [
+        {
+            "name": "AppHealthCheck",
+            "pingable": true,
+            "protocol": "http",
+            "port": "7777",
+            "type": "private",
+            "ping": "/ping"
+        },
+        {
+            "protocol": "http",
+            "port": "9999",
+            "spec": {
+                "name": "AuditSafeAPI",
+                "version": "1.0.0"
+            },
+            "title": "ReceiveHTTPMessage",
+            "swagger": {
+                "swagger": "2.0",
+                "info": {
+                    "title": "AuditSafeAPI",
+                    "version": "1.0.0",
+                    "description": " "
+                },
+                "paths": {
+                    "/audit-safe": {
+                        "post": {
+                            "summary": "postAudit-safe_POST",
+                            "operationId": "post_audit-safe",
+                            "parameters": [
+                                {
+                                    "name": "body",
+                                    "in": "body",
+                                    "description": "request body parameter",
+                                    "required": true,
+                                    "schema": {
+                                        "$ref": "#/definitions/schema1"
+                                    }
+                                }
+                            ],
+                            "responses": {
+                                "200": {
+                                    "schema": {
+                                        "$ref": "#/definitions/schema2"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "definitions": {
+                    "schema1": {
+                        "type": "object",
+                        "properties": {
+                            "transacion-id": {
+                                "type": "string",
+                                "default": "ABC-12"
+                            },
+                            "audit-event": {
+                                "type": "string",
+                                "default": "event"
+                            },
+                            "event-description": {
+                                "type": "string",
+                                "default": "Adherent 123 demande"
+                            },
+                            "event-source": {
+                                "type": "string",
+                                "default": "BPM"
+                            },
+                            "payload": {
+                                "type": "string",
+                                "default": "donnees bruts"
+                            },
+                            "status": {
+                                "type": "string",
+                                "default": ""
+                            }
+                        }
+                    },
+                    "schema2": {
+                        "type": "object",
+                        "properties": {
+                            "tas_event_id": {
+                                "type": "string",
+                                "default": "event-id"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "propertyPrefix": "TCI_FLOGO_USER_",
+    "properties": []
+}

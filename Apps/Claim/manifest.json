@@ -1,0 +1,104 @@
+{
+    "name": "ClaimsApp",
+    "description": "",
+    "version": {
+        "semVer": "4.0.0"
+    },
+    "type": "flogo",
+    "resources": {
+        "physicalMemory": 1024,
+        "totalMemory": 4096,
+        "cpuQuota": 25
+    },
+    "endpoints": [
+        {
+            "name": "AppHealthCheck",
+            "pingable": true,
+            "protocol": "http",
+            "port": "7777",
+            "type": "private",
+            "ping": "/ping"
+        },
+        {
+            "protocol": "http",
+            "port": "9999",
+            "spec": {
+                "name": "ClaimsApp",
+                "version": "1.0.0"
+            },
+            "title": "ReceiveHTTPMessage",
+            "swagger": {
+                "swagger": "2.0",
+                "info": {
+                    "title": "ClaimsApp",
+                    "version": "1.0.0",
+                    "description": " "
+                },
+                "paths": {
+                    "/claim": {
+                        "post": {
+                            "summary": "postIndemnisation_POST",
+                            "operationId": "post_claim",
+                            "parameters": [
+                                {
+                                    "name": "body",
+                                    "in": "body",
+                                    "description": "request body parameter",
+                                    "required": true,
+                                    "schema": {
+                                        "$ref": "#/definitions/schema1"
+                                    }
+                                }
+                            ],
+                            "responses": {
+                                "200": {
+                                    "schema": {
+                                        "$ref": "#/definitions/schema2"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "definitions": {
+                    "schema1": {
+                        "type": "object",
+                        "properties": {
+                            "customerid": {
+                                "type": "string",
+                                "default": "ABC-123-L"
+                            },
+                            "LastName": {
+                                "type": "string",
+                                "default": "Kanaan"
+                            },
+                            "FirstName": {
+                                "type": "string",
+                                "default": "Nadim"
+                            },
+                            "Type Of Accident": {
+                                "type": "string",
+                                "default": "Accident domestique or Accident sportif or Accident de la route"
+                            },
+                            "No of Days": {
+                                "type": "integer",
+                                "default": 10
+                            }
+                        }
+                    },
+                    "schema2": {
+                        "type": "object",
+                        "properties": {
+                            "CaseReference": {
+                                "type": "string",
+                                "default": "XXXX"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "propertyPrefix": "TCI_FLOGO_USER_",
+    "properties": []
+}

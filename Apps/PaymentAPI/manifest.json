@@ -1,0 +1,124 @@
+{
+    "name": "PaymentAPI",
+    "description": "",
+    "version": {
+        "semVer": "4.0.0"
+    },
+    "type": "flogo",
+    "resources": {
+        "physicalMemory": 1024,
+        "totalMemory": 4096,
+        "cpuQuota": 25
+    },
+    "endpoints": [
+        {
+            "name": "AppHealthCheck",
+            "pingable": true,
+            "protocol": "http",
+            "port": "7777",
+            "type": "private",
+            "ping": "/ping"
+        },
+        {
+            "protocol": "http",
+            "port": "9999",
+            "spec": {
+                "name": "PaymentAPI",
+                "version": "1.0.0"
+            },
+            "title": "ReceiveHTTPMessage",
+            "swagger": {
+                "swagger": "2.0",
+                "info": {
+                    "title": "PaymentAPI",
+                    "version": "1.0.0"
+                },
+                "paths": {
+                    "/claims": {
+                        "post": {
+                            "summary": "postClaims_POST",
+                            "operationId": "post_claims",
+                            "parameters": [
+                                {
+                                    "name": "body",
+                                    "in": "body",
+                                    "description": "request body parameter",
+                                    "required": true,
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "customerid": {
+                                                "type": "string",
+                                                "default": "String"
+                                            },
+                                            "CaseRef": {
+                                                "type": "string",
+                                                "default": "string"
+                                            },
+                                            "policyid": {
+                                                "type": "string",
+                                                "default": "string"
+                                            },
+                                            "date": {
+                                                "type": "string",
+                                                "default": " string"
+                                            },
+                                            "noofdays": {
+                                                "type": "integer",
+                                                "default": 12
+                                            },
+                                            "Amount": {
+                                                "type": "integer",
+                                                "default": 33
+                                            }
+                                        }
+                                    }
+                                }
+                            ],
+                            "responses": {
+                                "200": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "claimid": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "propertyPrefix": "TCI_FLOGO_USER_",
+    "properties": [
+        {
+            "name": "PostgreSQL.PG.Host",
+            "datatype": "string",
+            "default": "postgres.cskzim8w48e3.ap-south-1.rds.amazonaws.com"
+        },
+        {
+            "name": "PostgreSQL.PG.Port",
+            "datatype": "number",
+            "default": "5432"
+        },
+        {
+            "name": "PostgreSQL.PG.Database_Name",
+            "datatype": "string",
+            "default": "postgres"
+        },
+        {
+            "name": "PostgreSQL.PG.User",
+            "datatype": "string",
+            "default": "postgres"
+        },
+        {
+            "name": "PostgreSQL.PG.Password",
+            "datatype": "password",
+            "default": "password"
+        }
+    ]
+}

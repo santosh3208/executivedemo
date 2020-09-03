@@ -1,0 +1,295 @@
+{
+    "imports": [
+        "github.com/project-flogo/flow",
+        "git.tibco.com/git/product/ipaas/wi-tcta.git/src/app/AuditSafe/activity/txcreate",
+        "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/activity/httpresponse",
+        "github.com/project-flogo/contrib/activity/actreturn",
+        "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/trigger/rest",
+        "github.com/project-flogo/contrib/function/datetime"
+    ],
+    "name": "AuditSafeAPI",
+    "description": "",
+    "version": {
+        "semVer": "4.0.0"
+    },
+    "type": "flogo:app",
+    "appModel": "1.1.1",
+    "triggers": [
+        {
+            "ref": "#rest",
+            "name": "tibco-wi-rest",
+            "description": "Simple REST Trigger",
+            "settings": {
+                "port": 9999,
+                "APISpecUpdate": true,
+                "swagger": {
+                    "filename": "Audit API.json",
+                    "content": "data:application/json;base64,eyJzd2FnZ2VyIjoiMi4wIiwiaW5mbyI6eyJ2ZXJzaW9uIjoiMS4wIiwidGl0bGUiOiJBdWRpdCBBUEkiLCJ4LWxhc3RNb2RpZmllZCI6IjE5IEp1bHkgMjAyMCA1OjA4OjA3IHBtIChJbmRpYSBTdGFuZGFyZCBUaW1lKSJ9LCJwYXRocyI6eyIvYXVkaXQtc2FmZSI6eyJwb3N0Ijp7InByb2R1Y2VzIjpbImFwcGxpY2F0aW9uL2pzb24iXSwicmVzcG9uc2VzIjp7IjIwMCI6eyJkZXNjcmlwdGlvbiI6IlN1Y2Nlc3MgcmVzcG9uc2UiLCJzY2hlbWEiOnsiJHJlZiI6IiMvZGVmaW5pdGlvbnMvYXVkaXRfMjAwIn0sImV4YW1wbGVzIjp7ImFwcGxpY2F0aW9uL2pzb24iOnsidGFzX2V2ZW50X2lkIjoiZXZlbnQtaWQifX19fSwicGFyYW1ldGVycyI6W3sibmFtZSI6ImJvZHkiLCJpbiI6ImJvZHkiLCJkZXNjcmlwdGlvbiI6IkF1ZGl0IElucHV0Iiwic2NoZW1hIjp7IiRyZWYiOiIjL2RlZmluaXRpb25zL2F1ZGl0X2lucHV0In19XSwib3BlcmF0aW9uSWQiOiJwb3N0QXVkaXQtc2FmZSIsInN1bW1hcnkiOiJBdWRpdCBTYWZlIiwiZGVzY3JpcHRpb24iOiJBam91dGVyIHVuZSBsaWduZSBkJ2F1ZGl0IiwiY29uc3VtZXMiOlsiYXBwbGljYXRpb24vanNvbiJdfX19LCJkZWZpbml0aW9ucyI6eyJhdWRpdF9pbnB1dCI6eyJ0eXBlIjoib2JqZWN0IiwicHJvcGVydGllcyI6eyJ0cmFuc2FjaW9uLWlkIjp7InR5cGUiOiJzdHJpbmciLCJkZWZhdWx0IjoiQUJDLTEyIn0sImF1ZGl0LWV2ZW50Ijp7InR5cGUiOiJzdHJpbmciLCJkZWZhdWx0IjoiZXZlbnQifSwiZXZlbnQtZGVzY3JpcHRpb24iOnsidHlwZSI6InN0cmluZyIsImRlZmF1bHQiOiJBZGhlcmVudCAxMjMgZGVtYW5kZSJ9LCJldmVudC1zb3VyY2UiOnsidHlwZSI6InN0cmluZyIsImRlZmF1bHQiOiJCUE0ifSwicGF5bG9hZCI6eyJ0eXBlIjoic3RyaW5nIiwiZGVmYXVsdCI6ImRvbm5lZXMgYnJ1dHMifSwic3RhdHVzIjp7InR5cGUiOiJzdHJpbmciLCJkZWZhdWx0IjoiIn19fSwiYXVkaXRfMjAwIjp7InR5cGUiOiJvYmplY3QiLCJwcm9wZXJ0aWVzIjp7InRhc19ldmVudF9pZCI6eyJ0eXBlIjoic3RyaW5nIiwiZGVmYXVsdCI6ImV2ZW50LWlkIn19fX19"
+                },
+                "secureConnection": false,
+                "serverKey": "",
+                "caCertificate": ""
+            },
+            "id": "ReceiveHTTPMessage",
+            "handlers": [
+                {
+                    "description": "",
+                    "settings": {
+                        "APISpecPath": "/audit-safe",
+                        "Method": "POST",
+                        "Path": "/audit-safe",
+                        "OutputValidation": false
+                    },
+                    "action": {
+                        "ref": "github.com/project-flogo/flow",
+                        "settings": {
+                            "flowURI": "res://flow:postAudit-safe_POST"
+                        },
+                        "input": {
+                            "body": "=$.body"
+                        },
+                        "output": {
+                            "responseBody": {
+                                "mapping": {
+                                    "body": "=$.responseBody.body"
+                                }
+                            }
+                        }
+                    },
+                    "reply": {
+                        "code": 200,
+                        "configureResponseCodes": true,
+                        "message": ""
+                    },
+                    "schemas": {
+                        "reply": {
+                            "responseBody": {
+                                "type": "json",
+                                "value": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}}",
+                                "fe_metadata": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}}"
+                            },
+                            "responseCodesSchema": {
+                                "type": "json",
+                                "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"code\":{\"type\":\"number\"},\"responseType\":{\"type\":\"string\"},\"responseSchema\":{\"type\":\"string\"}}}}",
+                                "fe_metadata": "[{\"code\":200,\"responseType\":\"object\",\"responseSchema\":\"{\\\"type\\\":\\\"object\\\",\\\"properties\\\":{\\\"tas_event_id\\\":{\\\"type\\\":\\\"string\\\",\\\"default\\\":\\\"event-id\\\"}}}\"}]"
+                            }
+                        },
+                        "output": {
+                            "body": {
+                                "type": "json",
+                                "value": "{\"type\":\"object\",\"properties\":{\"transacion-id\":{\"type\":\"string\",\"default\":\"ABC-12\"},\"audit-event\":{\"type\":\"string\",\"default\":\"event\"},\"event-description\":{\"type\":\"string\",\"default\":\"Adherent 123 demande\"},\"event-source\":{\"type\":\"string\",\"default\":\"BPM\"},\"payload\":{\"type\":\"string\",\"default\":\"donnees bruts\"},\"status\":{\"type\":\"string\",\"default\":\"\"}}}",
+                                "fe_metadata": "{\"type\":\"object\",\"properties\":{\"transacion-id\":{\"type\":\"string\",\"default\":\"ABC-12\"},\"audit-event\":{\"type\":\"string\",\"default\":\"event\"},\"event-description\":{\"type\":\"string\",\"default\":\"Adherent 123 demande\"},\"event-source\":{\"type\":\"string\",\"default\":\"BPM\"},\"payload\":{\"type\":\"string\",\"default\":\"donnees bruts\"},\"status\":{\"type\":\"string\",\"default\":\"\"}}}"
+                            }
+                        }
+                    },
+                    "name": "postAudit-safe_POST"
+                }
+            ]
+        }
+    ],
+    "resources": [
+        {
+            "id": "flow:postAudit-safe_POST",
+            "data": {
+                "name": "postAudit-safe_POST",
+                "description": "",
+                "links": [
+                    {
+                        "id": 1,
+                        "from": "PostAuditEvent",
+                        "to": "ConfigureHTTPResponse",
+                        "type": "default"
+                    },
+                    {
+                        "id": 2,
+                        "from": "ConfigureHTTPResponse",
+                        "to": "Return",
+                        "type": "default"
+                    },
+                    {
+                        "id": 3,
+                        "from": "PostAuditEvent",
+                        "to": "ConfigureHTTPResponse1",
+                        "type": "error",
+                        "label": "PostAuditEventtoConfigureHTTPResponse1"
+                    },
+                    {
+                        "id": 4,
+                        "from": "ConfigureHTTPResponse1",
+                        "to": "Return1",
+                        "type": "default"
+                    }
+                ],
+                "tasks": [
+                    {
+                        "id": "PostAuditEvent",
+                        "name": "PostAuditEvent",
+                        "description": "Use this activity to post an audit event to TIBCO Cloud(TM) AuditSafe",
+                        "activity": {
+                            "ref": "#txcreate",
+                            "input": {
+                                "input": {
+                                    "mapping": {
+                                        "transaction_id": "=$flow.body[\"transacion-id\"]",
+                                        "audit_event": "=$flow.body[\"audit-event\"]",
+                                        "event_desc": "=$flow.body[\"event-description\"]",
+                                        "event_timestamp": "=datetime.currentDatetime()",
+                                        "event_status": "=$flow.body.status",
+                                        "biz_proc": "Insurance Claims Process"
+                                    }
+                                }
+                            },
+                            "schemas": {
+                                "input": {
+                                    "input": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-06/schema#\",\"type\":\"object\",\"properties\":{\"transaction_id\":{\"type\":\"string\"},\"biz_proc\":{\"type\":\"string\"},\"audit_event\":{\"type\":\"string\"},\"event_desc\":{\"type\":\"string\"},\"event_id\":{\"type\":\"string\"},\"event_timestamp\":{\"type\":\"string\"},\"event_status\":{\"type\":\"string\"},\"event_source\":{\"type\":\"string\"},\"event_destination\":{\"type\":\"string\"},\"extra_props\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"prop_name\":{\"type\":\"string\"},\"prop_value\":{\"type\":\"string\"}}}},\"parent_event_id\":{\"type\":\"string\"},\"payload\":{\"type\":\"string\"}},\"required\":[\"transaction_id\",\"biz_proc\",\"audit_event\",\"event_desc\",\"event_timestamp\",\"event_status\"]}",
+                                        "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-06/schema#\",\"type\":\"object\",\"properties\":{\"transaction_id\":{\"type\":\"string\"},\"biz_proc\":{\"type\":\"string\"},\"audit_event\":{\"type\":\"string\"},\"event_desc\":{\"type\":\"string\"},\"event_id\":{\"type\":\"string\"},\"event_timestamp\":{\"type\":\"string\"},\"event_status\":{\"type\":\"string\"},\"event_source\":{\"type\":\"string\"},\"event_destination\":{\"type\":\"string\"},\"extra_props\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"prop_name\":{\"type\":\"string\"},\"prop_value\":{\"type\":\"string\"}}}},\"parent_event_id\":{\"type\":\"string\"},\"payload\":{\"type\":\"string\"}},\"required\":[\"transaction_id\",\"biz_proc\",\"audit_event\",\"event_desc\",\"event_timestamp\",\"event_status\"]}"
+                                    }
+                                },
+                                "output": {
+                                    "output": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-06/schema#\",\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"string\"},\"transaction_id\":{\"type\":\"string\"},\"event_id\":{\"type\":\"string\"}}}",
+                                        "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-06/schema#\",\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"string\"},\"transaction_id\":{\"type\":\"string\"},\"event_id\":{\"type\":\"string\"}}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "ConfigureHTTPResponse",
+                        "name": "ConfigureHTTPResponse",
+                        "description": "Configure HTTP Response Activity",
+                        "activity": {
+                            "ref": "#httpresponse",
+                            "input": {
+                                "trigger": "",
+                                "responsecode": "200",
+                                "input": {
+                                    "mapping": {
+                                        "body": {
+                                            "tas_event_id": "=$activity[PostAuditEvent].output.tas_event_id"
+                                        }
+                                    }
+                                }
+                            },
+                            "schemas": {
+                                "input": {
+                                    "input": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"string\",\"default\":\"event-id\"}}}}}",
+                                        "fe_metadata": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"string\",\"default\":\"event-id\"}}}}}"
+                                    }
+                                },
+                                "output": {
+                                    "response": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"string\",\"default\":\"event-id\"}}}}}",
+                                        "fe_metadata": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"string\",\"default\":\"event-id\"}}}}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "Return",
+                        "name": "Return",
+                        "description": "Simple Return Activity",
+                        "activity": {
+                            "ref": "#actreturn"
+                        }
+                    },
+                    {
+                        "id": "ConfigureHTTPResponse1",
+                        "name": "ConfigureHTTPResponse1",
+                        "description": "Configure HTTP Response Activity",
+                        "activity": {
+                            "ref": "#httpresponse",
+                            "input": {
+                                "trigger": "",
+                                "responsecode": "200",
+                                "input": {
+                                    "mapping": {
+                                        "body": {
+                                            "tas_event_id": "TAS"
+                                        }
+                                    }
+                                }
+                            },
+                            "schemas": {
+                                "input": {
+                                    "input": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"string\",\"default\":\"event-id\"}}}}}",
+                                        "fe_metadata": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"string\",\"default\":\"event-id\"}}}}}"
+                                    }
+                                },
+                                "output": {
+                                    "response": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"string\",\"default\":\"event-id\"}}}}}",
+                                        "fe_metadata": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"string\",\"default\":\"event-id\"}}}}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "Return1",
+                        "name": "Return1",
+                        "description": "Simple Return Activity",
+                        "activity": {
+                            "ref": "#actreturn",
+                            "settings": {
+                                "mappings": {
+                                    "responseBody": {
+                                        "mapping": {
+                                            "body": "=$activity[ConfigureHTTPResponse1].response.body"
+                                        }
+                                    },
+                                    "code": "=$activity[ConfigureHTTPResponse1].code"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "metadata": {
+                    "input": [
+                        {
+                            "name": "body",
+                            "type": "object",
+                            "schema": {
+                                "type": "json",
+                                "value": "{\"transacion-id\":{\"type\":\"string\",\"default\":\"ABC-12\"},\"audit-event\":{\"type\":\"string\",\"default\":\"event\"},\"event-description\":{\"type\":\"string\",\"default\":\"Adherent 123 demande\"},\"event-source\":{\"type\":\"string\",\"default\":\"BPM\"},\"payload\":{\"type\":\"string\",\"default\":\"donnees bruts\"},\"status\":{\"type\":\"string\",\"default\":\"\"}}"
+                            }
+                        }
+                    ],
+                    "output": [
+                        {
+                            "name": "code",
+                            "type": "integer"
+                        },
+                        {
+                            "name": "responseBody",
+                            "type": "object",
+                            "schema": {
+                                "type": "json",
+                                "value": "{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}"
+                            }
+                        }
+                    ],
+                    "fe_metadata": {
+                        "input": "{\"type\":\"object\",\"title\":\"ReceiveHTTPMessage\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"transacion-id\":{\"type\":\"string\",\"default\":\"ABC-12\"},\"audit-event\":{\"type\":\"string\",\"default\":\"event\"},\"event-description\":{\"type\":\"string\",\"default\":\"Adherent 123 demande\"},\"event-source\":{\"type\":\"string\",\"default\":\"BPM\"},\"payload\":{\"type\":\"string\",\"default\":\"donnees bruts\"},\"status\":{\"type\":\"string\",\"default\":\"\"}}}}}",
+                        "output": "{\"type\":\"object\",\"title\":\"Inputs\",\"properties\":{\"code\":{\"type\":\"integer\",\"required\":false},\"responseBody\":{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}}},\"required\":[]}"
+                    }
+                },
+                "explicitReply": true
+            }
+        }
+    ],
+    "properties": [],
+    "connections": {},
+    "contrib": "W3sicmVmIjoiZ2l0LnRpYmNvLmNvbS9naXQvcHJvZHVjdC9pcGFhcy93aS1jb250cmliLmdpdC9jb250cmlidXRpb25zL0dlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCJ9LHsicmVmIjoiZ2l0LnRpYmNvLmNvbS9naXQvcHJvZHVjdC9pcGFhcy93aS10Y3RhLmdpdC9zcmMvYXBwL0F1ZGl0U2FmZSIsInMzbG9jYXRpb24iOiJUaWJjby9BdWRpdFNhZmUifV0=",
+    "fe_metadata": "UEsDBAoAAAAIAAxcIlGrqSRGFQAAABMAAAAIAAAAYXBwLmpzb26rViopykxPTy1yy8kvL1ayio6tBQBQSwECFAAKAAAACAAMXCJRq6kkRhUAAAATAAAACAAAAAAAAAAAAAAAAAAAAAAAYXBwLmpzb25QSwUGAAAAAAEAAQA2AAAAOwAAAAAA"
+}

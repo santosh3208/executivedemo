@@ -1,0 +1,77 @@
+{
+    "name": "CaseStateAPI",
+    "description": "",
+    "version": {
+        "semVer": "4.0.0"
+    },
+    "type": "flogo",
+    "resources": {
+        "physicalMemory": 1024,
+        "totalMemory": 4096,
+        "cpuQuota": 25
+    },
+    "endpoints": [
+        {
+            "name": "AppHealthCheck",
+            "pingable": true,
+            "protocol": "http",
+            "port": "7777",
+            "type": "private",
+            "ping": "/ping"
+        },
+        {
+            "protocol": "http",
+            "port": "9999",
+            "spec": {
+                "name": "CaseStateAPI",
+                "version": "1.0.0"
+            },
+            "title": "ReceiveHTTPMessage",
+            "swagger": {
+                "swagger": "2.0",
+                "info": {
+                    "title": "CaseStateAPI",
+                    "version": "1.0.0",
+                    "description": " "
+                },
+                "paths": {
+                    "/bpm-state": {
+                        "get": {
+                            "summary": "getBpm-state_GET",
+                            "operationId": "get_bpm-state",
+                            "parameters": [
+                                {
+                                    "name": "caseref",
+                                    "in": "query",
+                                    "description": "Request parameter",
+                                    "required": false,
+                                    "type": "string"
+                                }
+                            ],
+                            "responses": {
+                                "200": {
+                                    "schema": {
+                                        "$ref": "#/definitions/schema1"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "definitions": {
+                    "schema1": {
+                        "type": "object",
+                        "properties": {
+                            "state": {
+                                "type": "string",
+                                "default": "etat dossier"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "propertyPrefix": "TCI_FLOGO_USER_",
+    "properties": []
+}

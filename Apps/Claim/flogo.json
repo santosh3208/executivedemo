@@ -1,0 +1,637 @@
+{
+    "imports": [
+        "github.com/project-flogo/flow",
+        "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/activity/log",
+        "emea-swi-svn.emea.tibco.com/svn/Ariel/tci-liveapps/trunk/LiveApps/activity/create",
+        "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/activity/sleep",
+        "emea-swi-svn.emea.tibco.com/svn/Ariel/tci-liveapps/trunk/LiveApps/activity/get",
+        "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/activity/httpresponse",
+        "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/activity/rest",
+        "github.com/project-flogo/contrib/activity/actreturn",
+        "rest_1 git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/trigger/rest",
+        "github.com/project-flogo/contrib/function/string"
+    ],
+    "name": "ClaimsApp",
+    "description": "",
+    "version": {
+        "semVer": "4.0.0"
+    },
+    "type": "flogo:app",
+    "appModel": "1.1.1",
+    "triggers": [
+        {
+            "ref": "#rest_1",
+            "name": "tibco-wi-rest",
+            "description": "Simple REST Trigger",
+            "settings": {
+                "port": 9999,
+                "APISpecUpdate": true,
+                "swagger": {
+                    "filename": "ClaimAPI.json",
+                    "content": "data:application/json;base64,eyJzd2FnZ2VyIjoiMi4wIiwiaW5mbyI6eyJ2ZXJzaW9uIjoiMS4wIiwidGl0bGUiOiJDbGFpbUFQSSIsIngtbGFzdE1vZGlmaWVkIjoiMjAgSnVseSAyMDIwIDE6MDE6MTggYW0gKEluZGlhIFN0YW5kYXJkIFRpbWUpIiwiZGVzY3JpcHRpb24iOiJBUEkgZCdpbmRlbW5pc2F0aW9uIn0sInBhdGhzIjp7Ii9jbGFpbSI6eyJwb3N0Ijp7InByb2R1Y2VzIjpbImFwcGxpY2F0aW9uL2pzb24iXSwicmVzcG9uc2VzIjp7IjIwMCI6eyJkZXNjcmlwdGlvbiI6IlN1Y2Nlc3MgcmVzcG9uc2UiLCJzY2hlbWEiOnsiJHJlZiI6IiMvZGVmaW5pdGlvbnMvaW5kZW1uaXNhdGlvbl8yMDAifSwiZXhhbXBsZXMiOnsiYXBwbGljYXRpb24vanNvbiI6eyJyZWZlcmVuY2UtZG9zc2llciI6IlhYWFgifX19fSwicGFyYW1ldGVycyI6W3sibmFtZSI6ImJvZHkiLCJpbiI6ImJvZHkiLCJkZXNjcmlwdGlvbiI6IkluZGVtbmlzYXRpb24gcGF5bG9hZCIsInNjaGVtYSI6eyIkcmVmIjoiIy9kZWZpbml0aW9ucy9JbmRlbW5pc2F0aW9uX2luIn19XSwib3BlcmF0aW9uSWQiOiJwb3N0SW5kZW1uaXNhdGlvbiIsImNvbnN1bWVzIjpbImFwcGxpY2F0aW9uL2pzb24iXSwic3VtbWFyeSI6IkRlbWFuZGUgZCdpbmRlbW5pc2F0aW9uIn19fSwiZGVmaW5pdGlvbnMiOnsiSW5kZW1uaXNhdGlvbl9pbiI6eyJ0eXBlIjoib2JqZWN0IiwicHJvcGVydGllcyI6eyJjdXN0b21lcmlkIjp7InR5cGUiOiJzdHJpbmciLCJkZWZhdWx0IjoiQUJDLTEyMy1MIn0sIkxhc3ROYW1lIjp7InR5cGUiOiJzdHJpbmciLCJkZWZhdWx0IjoiS2FuYWFuIn0sIkZpcnN0TmFtZSI6eyJ0eXBlIjoic3RyaW5nIiwiZGVmYXVsdCI6Ik5hZGltIn0sIlR5cGUgT2YgQWNjaWRlbnQiOnsidHlwZSI6InN0cmluZyIsImRlZmF1bHQiOiJBY2NpZGVudCBkb21lc3RpcXVlIG9yIEFjY2lkZW50IHNwb3J0aWYgb3IgQWNjaWRlbnQgZGUgbGEgcm91dGUifSwiTm8gb2YgRGF5cyI6eyJ0eXBlIjoiaW50ZWdlciIsImRlZmF1bHQiOjEwfX19LCJpbmRlbW5pc2F0aW9uXzIwMCI6eyJ0eXBlIjoib2JqZWN0IiwicHJvcGVydGllcyI6eyJDYXNlUmVmZXJlbmNlIjp7InR5cGUiOiJzdHJpbmciLCJkZWZhdWx0IjoiWFhYWCJ9fX19fQ=="
+                },
+                "secureConnection": false,
+                "serverKey": "",
+                "caCertificate": ""
+            },
+            "id": "ReceiveHTTPMessage",
+            "handlers": [
+                {
+                    "description": "",
+                    "settings": {
+                        "APISpecPath": "/claim",
+                        "Method": "POST",
+                        "Path": "/claim",
+                        "OutputValidation": false
+                    },
+                    "action": {
+                        "ref": "github.com/project-flogo/flow",
+                        "settings": {
+                            "flowURI": "res://flow:postIndemnisation_POST"
+                        },
+                        "input": {
+                            "body": "=$.body"
+                        },
+                        "output": {
+                            "responseBody": {
+                                "mapping": {
+                                    "body": "=$.responseBody.body"
+                                }
+                            }
+                        }
+                    },
+                    "reply": {
+                        "code": 200,
+                        "configureResponseCodes": true,
+                        "message": ""
+                    },
+                    "schemas": {
+                        "reply": {
+                            "responseBody": {
+                                "type": "json",
+                                "value": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}}",
+                                "fe_metadata": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}}"
+                            },
+                            "responseCodesSchema": {
+                                "type": "json",
+                                "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"code\":{\"type\":\"number\"},\"responseType\":{\"type\":\"string\"},\"responseSchema\":{\"type\":\"string\"}}}}",
+                                "fe_metadata": "[{\"code\":200,\"responseType\":\"object\",\"responseSchema\":\"{\\\"type\\\":\\\"object\\\",\\\"properties\\\":{\\\"CaseReference\\\":{\\\"type\\\":\\\"string\\\",\\\"default\\\":\\\"XXXX\\\"}}}\"}]"
+                            }
+                        },
+                        "output": {
+                            "body": {
+                                "type": "json",
+                                "value": "{\"type\":\"object\",\"properties\":{\"customerid\":{\"type\":\"string\",\"default\":\"ABC-123-L\"},\"LastName\":{\"type\":\"string\",\"default\":\"Kanaan\"},\"FirstName\":{\"type\":\"string\",\"default\":\"Nadim\"},\"Type Of Accident\":{\"type\":\"string\",\"default\":\"Accident domestique or Accident sportif or Accident de la route\"},\"No of Days\":{\"type\":\"integer\",\"default\":10}}}",
+                                "fe_metadata": "{\"type\":\"object\",\"properties\":{\"customerid\":{\"type\":\"string\",\"default\":\"ABC-123-L\"},\"LastName\":{\"type\":\"string\",\"default\":\"Kanaan\"},\"FirstName\":{\"type\":\"string\",\"default\":\"Nadim\"},\"Type Of Accident\":{\"type\":\"string\",\"default\":\"Accident domestique or Accident sportif or Accident de la route\"},\"No of Days\":{\"type\":\"integer\",\"default\":10}}}"
+                            }
+                        }
+                    },
+                    "name": "postIndemnisation_POST"
+                }
+            ]
+        }
+    ],
+    "resources": [
+        {
+            "id": "flow:postIndemnisation_POST",
+            "data": {
+                "name": "postIndemnisation_POST",
+                "description": "",
+                "links": [
+                    {
+                        "id": 1,
+                        "from": "LogMessage",
+                        "to": "LiveAppsCreateCase",
+                        "type": "default"
+                    },
+                    {
+                        "id": 2,
+                        "from": "LiveAppsCreateCase",
+                        "to": "Sleep",
+                        "type": "default"
+                    },
+                    {
+                        "id": 3,
+                        "from": "Sleep",
+                        "to": "LiveAppsGetCase",
+                        "type": "default"
+                    },
+                    {
+                        "id": 4,
+                        "from": "LiveAppsGetCase",
+                        "to": "LogMessage1",
+                        "type": "default"
+                    },
+                    {
+                        "id": 5,
+                        "from": "LogMessage1",
+                        "to": "ConfigureHTTPResponse",
+                        "type": "default"
+                    },
+                    {
+                        "id": 6,
+                        "from": "ConfigureHTTPResponse",
+                        "to": "Audit_1",
+                        "type": "default"
+                    },
+                    {
+                        "id": 7,
+                        "from": "Audit_1",
+                        "to": "Return",
+                        "type": "default"
+                    },
+                    {
+                        "id": 8,
+                        "from": "LiveAppsGetCase",
+                        "to": "LogMessage2",
+                        "type": "error",
+                        "label": "LiveAppsGetCasetoSleep1"
+                    },
+                    {
+                        "id": 9,
+                        "from": "LogMessage2",
+                        "to": "Sleep1",
+                        "type": "default"
+                    },
+                    {
+                        "id": 10,
+                        "from": "Sleep1",
+                        "to": "LiveAppsGetCase1",
+                        "type": "default"
+                    },
+                    {
+                        "id": 11,
+                        "from": "LiveAppsGetCase1",
+                        "to": "ConfigureHTTPResponse1",
+                        "type": "default"
+                    },
+                    {
+                        "id": 12,
+                        "from": "ConfigureHTTPResponse1",
+                        "to": "Audit_2",
+                        "type": "default"
+                    },
+                    {
+                        "id": 13,
+                        "from": "Audit_2",
+                        "to": "CopyOfReturn",
+                        "type": "default"
+                    }
+                ],
+                "tasks": [
+                    {
+                        "id": "LogMessage",
+                        "name": "LogMessage",
+                        "description": "Simple Log Message Activity",
+                        "activity": {
+                            "ref": "#log",
+                            "input": {
+                                "Log Level": "INFO",
+                                "flowInfo": false,
+                                "message": "=$flow.body[\"Type Of Accident\"]"
+                            }
+                        }
+                    },
+                    {
+                        "id": "LiveAppsCreateCase",
+                        "name": "LiveAppsCreateCase",
+                        "description": "Live Apps Create Case",
+                        "activity": {
+                            "ref": "#create",
+                            "input": {
+                                "applicationId": "4033",
+                                "artifactId": "19920",
+                                "sandboxId": "3332",
+                                "processName": "CreateInsuranceClaimsProcess",
+                                "data": {
+                                    "mapping": {
+                                        "InsuranceClaimsProcess": {
+                                            "Customer": {
+                                                "CustomerID": "=$flow.body.customerid",
+                                                "LastName": "=$flow.body.LastName",
+                                                "FirstName": "=$flow.body.FirstName"
+                                            },
+                                            "TypeOfAccident": "=$flow.body[\"Type Of Accident\"]",
+                                            "Duration": "=$flow.body[\"No of Days\"]"
+                                        }
+                                    }
+                                }
+                            },
+                            "schemas": {
+                                "input": {
+                                    "data": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"properties\":{\"InsuranceClaimsProcess\":{\"type\":\"object\",\"properties\":{\"Customer\":{\"type\":\"object\",\"properties\":{\"CustomerID\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"CustomerID\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"24\",\"internalName\":\"CustomerID\"}},\"LastName\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"LastName\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"25\",\"internalName\":\"LastName\"}},\"FirstName\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"FirstName\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"26\",\"internalName\":\"FirstName\"}}}},\"TypeOfAccident\":{\"type\":\"string\",\"maxLength\":6,\"title\":\"Type Of Accident\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"10\",\"internalName\":\"TypeOfAccident\"},\"enum\":[\"SPORTS\",\"CAR\",\"HOME\"]},\"Duration\":{\"type\":\"integer\",\"title\":\"Duration\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"11\",\"internalName\":\"Duration\"}}}}}}",
+                                        "fe_metadata": "{\"type\":\"object\",\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"properties\":{\"InsuranceClaimsProcess\":{\"type\":\"object\",\"properties\":{\"Customer\":{\"type\":\"object\",\"properties\":{\"CustomerID\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"CustomerID\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"24\",\"internalName\":\"CustomerID\"}},\"LastName\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"LastName\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"25\",\"internalName\":\"LastName\"}},\"FirstName\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"FirstName\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"26\",\"internalName\":\"FirstName\"}}}},\"TypeOfAccident\":{\"type\":\"string\",\"maxLength\":6,\"title\":\"Type Of Accident\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"10\",\"internalName\":\"TypeOfAccident\"},\"enum\":[\"SPORTS\",\"CAR\",\"HOME\"]},\"Duration\":{\"type\":\"integer\",\"title\":\"Duration\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"11\",\"internalName\":\"Duration\"}}}}}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "Sleep",
+                        "name": "Sleep",
+                        "description": "Simple sleep Activity",
+                        "activity": {
+                            "ref": "#sleep",
+                            "input": {
+                                "IntervalTypeSetting": "Millisecond",
+                                "IntervalSetting": 200,
+                                "Interval": 0
+                            }
+                        }
+                    },
+                    {
+                        "id": "LiveAppsGetCase",
+                        "name": "LiveAppsGetCase",
+                        "description": "Live Apps Get Case",
+                        "activity": {
+                            "ref": "#get",
+                            "input": {
+                                "applicationId": "4033",
+                                "sandboxId": "3332",
+                                "caseRef": "=$activity[LiveAppsCreateCase].caseRef"
+                            },
+                            "schemas": {
+                                "output": {
+                                    "data": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"properties\":{\"State\":{\"type\":\"string\",\"title\":\"State\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"2\",\"internalName\":\"state\"},\"enum\":[\"Claim Received\",\"Investigate\",\"Payment\",\"Settle Claim\",\"Escalate\"]},\"CaseReference\":{\"type\":\"string\",\"maxLength\":18,\"title\":\"Case Reference \",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"34\",\"internalName\":\"CaseReference_1\",\"isSummary\":true}},\"Customer\":{\"type\":\"object\",\"properties\":{\"CustomerID\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"CustomerID\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"24\",\"internalName\":\"CustomerID\"}},\"LastName\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"LastName\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"25\",\"internalName\":\"LastName\"}},\"FirstName\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"FirstName\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"26\",\"internalName\":\"FirstName\"}},\"Email\":{\"type\":\"string\",\"format\":\"email\",\"maxLength\":254,\"title\":\"Email\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"27\",\"internalName\":\"Email\"}},\"Phone\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Phone\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"28\",\"internalName\":\"Phone\"}},\"Address\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Address\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"29\",\"internalName\":\"Address\"}}}},\"TypeOfAccident\":{\"type\":\"string\",\"maxLength\":6,\"title\":\"Type Of Accident\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"10\",\"internalName\":\"TypeOfAccident\"},\"enum\":[\"SPORTS\",\"CAR\",\"HOME\"]},\"Duration\":{\"type\":\"integer\",\"title\":\"Duration\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"11\",\"internalName\":\"Duration\"}},\"Policy\":{\"type\":\"object\",\"properties\":{\"Reference\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Reference\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"14\",\"internalName\":\"Reference\"}},\"MaximumDailyAllowance\":{\"type\":\"integer\",\"title\":\" Maximum Daily Allowance\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"15\",\"internalName\":\"MaximumDailyAllowance\"}},\"MaximumCoverageDays\":{\"type\":\"integer\",\"title\":\"Maximum Coverage Days\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"16\",\"internalName\":\"MaximumCoverageDays\"}},\"PolicyActive\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Policy Active\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"17\",\"internalName\":\"PolicyActive\"}},\"DateofExpiry\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Date of Expiry\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"18\",\"internalName\":\"DateofExpiry\"}}}},\"Claim\":{\"type\":\"object\",\"properties\":{\"Reference\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Reference\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"20\",\"internalName\":\"Reference\"}},\"NoofDays\":{\"type\":\"integer\",\"title\":\"No of Days\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"21\",\"internalName\":\"NoofDays\"}},\"Amount\":{\"type\":\"integer\",\"title\":\"Amount\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"22\",\"internalName\":\"Amount\"}}}},\"ApprovalRequired\":{\"type\":\"string\",\"maxLength\":3,\"title\":\"Approval Required\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"31\",\"internalName\":\"ApprovalRequired\"},\"enum\":[\"YES\",\"NO\"]},\"Kanban\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Kanban\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"35\",\"internalName\":\"Kanban\"}}},\"required\":[\"State\",\"CaseReference\"]}",
+                                        "fe_metadata": "{\"type\":\"object\",\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"properties\":{\"State\":{\"type\":\"string\",\"title\":\"State\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"2\",\"internalName\":\"state\"},\"enum\":[\"Claim Received\",\"Investigate\",\"Payment\",\"Settle Claim\",\"Escalate\"]},\"CaseReference\":{\"type\":\"string\",\"maxLength\":18,\"title\":\"Case Reference \",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"34\",\"internalName\":\"CaseReference_1\",\"isSummary\":true}},\"Customer\":{\"type\":\"object\",\"properties\":{\"CustomerID\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"CustomerID\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"24\",\"internalName\":\"CustomerID\"}},\"LastName\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"LastName\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"25\",\"internalName\":\"LastName\"}},\"FirstName\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"FirstName\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"26\",\"internalName\":\"FirstName\"}},\"Email\":{\"type\":\"string\",\"format\":\"email\",\"maxLength\":254,\"title\":\"Email\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"27\",\"internalName\":\"Email\"}},\"Phone\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Phone\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"28\",\"internalName\":\"Phone\"}},\"Address\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Address\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"29\",\"internalName\":\"Address\"}}}},\"TypeOfAccident\":{\"type\":\"string\",\"maxLength\":6,\"title\":\"Type Of Accident\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"10\",\"internalName\":\"TypeOfAccident\"},\"enum\":[\"SPORTS\",\"CAR\",\"HOME\"]},\"Duration\":{\"type\":\"integer\",\"title\":\"Duration\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"11\",\"internalName\":\"Duration\"}},\"Policy\":{\"type\":\"object\",\"properties\":{\"Reference\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Reference\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"14\",\"internalName\":\"Reference\"}},\"MaximumDailyAllowance\":{\"type\":\"integer\",\"title\":\" Maximum Daily Allowance\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"15\",\"internalName\":\"MaximumDailyAllowance\"}},\"MaximumCoverageDays\":{\"type\":\"integer\",\"title\":\"Maximum Coverage Days\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"16\",\"internalName\":\"MaximumCoverageDays\"}},\"PolicyActive\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Policy Active\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"17\",\"internalName\":\"PolicyActive\"}},\"DateofExpiry\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Date of Expiry\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"18\",\"internalName\":\"DateofExpiry\"}}}},\"Claim\":{\"type\":\"object\",\"properties\":{\"Reference\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Reference\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"20\",\"internalName\":\"Reference\"}},\"NoofDays\":{\"type\":\"integer\",\"title\":\"No of Days\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"21\",\"internalName\":\"NoofDays\"}},\"Amount\":{\"type\":\"integer\",\"title\":\"Amount\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"22\",\"internalName\":\"Amount\"}}}},\"ApprovalRequired\":{\"type\":\"string\",\"maxLength\":3,\"title\":\"Approval Required\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"31\",\"internalName\":\"ApprovalRequired\"},\"enum\":[\"YES\",\"NO\"]},\"Kanban\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Kanban\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"35\",\"internalName\":\"Kanban\"}}},\"required\":[\"State\",\"CaseReference\"]}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "LogMessage1",
+                        "name": "LogMessage1",
+                        "description": "Simple Log Message Activity",
+                        "activity": {
+                            "ref": "#log",
+                            "input": {
+                                "Log Level": "INFO",
+                                "flowInfo": false,
+                                "message": "Here**************"
+                            }
+                        }
+                    },
+                    {
+                        "id": "ConfigureHTTPResponse",
+                        "name": "ConfigureHTTPResponse",
+                        "description": "Configure HTTP Response Activity",
+                        "activity": {
+                            "ref": "#httpresponse",
+                            "input": {
+                                "trigger": "",
+                                "responsecode": "200",
+                                "input": {
+                                    "mapping": {
+                                        "body": {
+                                            "CaseReference": "=$activity[LiveAppsGetCase].data.CaseReference"
+                                        }
+                                    }
+                                }
+                            },
+                            "schemas": {
+                                "input": {
+                                    "input": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"CaseReference\":{\"type\":\"string\",\"default\":\"XXXX\"}}}}}",
+                                        "fe_metadata": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"CaseReference\":{\"type\":\"string\",\"default\":\"XXXX\"}}}}}"
+                                    }
+                                },
+                                "output": {
+                                    "response": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"CaseReference\":{\"type\":\"string\",\"default\":\"XXXX\"}}}}}",
+                                        "fe_metadata": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"CaseReference\":{\"type\":\"string\",\"default\":\"XXXX\"}}}}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "Audit_1",
+                        "name": "Audit_1",
+                        "description": "Simple REST Activity",
+                        "settings": {
+                            "retryOnError": {
+                                "count": 0,
+                                "interval": 0
+                            }
+                        },
+                        "activity": {
+                            "ref": "#rest",
+                            "input": {
+                                "enableASR": true,
+                                "serviceName": "tcius-M2pnNmQ2cTJlcmtrYmN1NG9sb2NiaDZ0NzViMnU3c3M",
+                                "resourcePath": "/audit-safe",
+                                "Method": "POST",
+                                "Uri": "/gsbc/TIB_SUB_01BB7EMJE7SVVCKZ15RWG95ESF/tci/3jg6d6q2erkkbcu4olocbh6t75b2u7ss",
+                                "Timeout": 0,
+                                "requestType": "application/json",
+                                "Use certificate for verification": false,
+                                "Server Certificate": "",
+                                "proxy": "",
+                                "host": "",
+                                "body": {
+                                    "mapping": {
+                                        "audit-event": "Claim Request",
+                                        "event-description": "=\"Claims request initiated by customer\" + \" \" + $flow.body.customerid + \" For a \" + $flow.body[\"Type Of Accident\"] + \"Leading to disability of \"+ $flow.body[\"No of Days\"]"
+                                    }
+                                }
+                            },
+                            "output": {
+                                "configureResponseCodes": true,
+                                "responseType": "application/json"
+                            },
+                            "schemas": {
+                                "input": {
+                                    "serviceMetadata": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"serviceId\":{\"type\":\"string\"},\"title\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"lastModifiedTime\":{\"type\":\"number\"},\"swaggerChecksum\":{\"type\":\"string\"},\"assurance\":{\"type\":\"string\"},\"intercom\":{\"type\":\"boolean\"},\"intercomRegion\":{\"type\":\"string\"},\"extAuthz\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}},\"path\":{\"type\":\"string\"},\"baseURL\":{\"type\":\"string\"},\"apiSpec\":{\"type\":\"object\",\"properties\":{\"definitions\":{\"type\":\"object\",\"properties\":{\"schema1\":{\"type\":\"object\",\"properties\":{\"properties\":{\"type\":\"object\",\"properties\":{\"audit-event\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"event-description\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"event-source\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"payload\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"status\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"transacion-id\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}}},\"type\":{\"type\":\"string\"}}},\"schema2\":{\"type\":\"object\",\"properties\":{\"properties\":{\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}}},\"type\":{\"type\":\"string\"}}}}},\"info\":{\"type\":\"object\",\"properties\":{\"description\":{\"type\":\"string\"},\"title\":{\"type\":\"string\"},\"version\":{\"type\":\"string\"}}},\"paths\":{\"type\":\"object\",\"properties\":{\"/audit-safe\":{\"type\":\"object\",\"properties\":{\"post\":{\"type\":\"object\",\"properties\":{\"operationId\":{\"type\":\"string\"},\"parameters\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"description\":{\"type\":\"string\"},\"in\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"required\":{\"type\":\"boolean\"},\"schema\":{\"type\":\"object\",\"properties\":{\"properties\":{\"type\":\"object\",\"properties\":{\"audit-event\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"event-description\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"event-source\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"payload\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"status\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"transacion-id\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}}},\"type\":{\"type\":\"string\"}}}}}},\"responses\":{\"type\":\"object\",\"properties\":{\"200\":{\"type\":\"object\",\"properties\":{\"schema\":{\"type\":\"object\",\"properties\":{\"properties\":{\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}}},\"type\":{\"type\":\"string\"}}}}}}},\"summary\":{\"type\":\"string\"}}}}}}},\"swagger\":{\"type\":\"string\"},\"host\":{\"type\":\"string\"},\"schemes\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}},\"basePath\":{\"type\":\"string\"}}}}}",
+                                        "fe_metadata": "{\"serviceId\":\"tcius-M2pnNmQ2cTJlcmtrYmN1NG9sb2NiaDZ0NzViMnU3c3M\",\"title\":\"AuditSafeAPI\",\"description\":\" \",\"lastModifiedTime\":1595496967292,\"swaggerChecksum\":\"ab5c2ccc5061fddcd40317b807d65f930c9774df5a856d8e125a8a9750036dae\",\"assurance\":\"published\",\"intercom\":true,\"intercomRegion\":\"us-west-2\",\"extAuthz\":[\"tenant-basic\"],\"path\":\"/gsbc/TIB_SUB_01BB7EMJE7SVVCKZ15RWG95ESF/tci/3jg6d6q2erkkbcu4olocbh6t75b2u7ss\",\"baseURL\":\"https://integration.cloud.tibcoapps.com\",\"apiSpec\":{\"definitions\":{\"schema1\":{\"properties\":{\"audit-event\":{\"default\":\"event\",\"type\":\"string\"},\"event-description\":{\"default\":\"Adherent 123 demande\",\"type\":\"string\"},\"event-source\":{\"default\":\"BPM\",\"type\":\"string\"},\"payload\":{\"default\":\"donnees bruts\",\"type\":\"string\"},\"status\":{\"default\":\"\",\"type\":\"string\"},\"transacion-id\":{\"default\":\"ABC-12\",\"type\":\"string\"}},\"type\":\"object\"},\"schema2\":{\"properties\":{\"tas_event_id\":{\"default\":\"event-id\",\"type\":\"string\"}},\"type\":\"object\"}},\"info\":{\"description\":\" \",\"title\":\"AuditSafeAPI\",\"version\":\"1.0.0\"},\"paths\":{\"/audit-safe\":{\"post\":{\"operationId\":\"post_audit-safe\",\"parameters\":[{\"description\":\"request body parameter\",\"in\":\"body\",\"name\":\"body\",\"required\":true,\"schema\":{\"properties\":{\"audit-event\":{\"default\":\"event\",\"type\":\"string\"},\"event-description\":{\"default\":\"Adherent 123 demande\",\"type\":\"string\"},\"event-source\":{\"default\":\"BPM\",\"type\":\"string\"},\"payload\":{\"default\":\"donnees bruts\",\"type\":\"string\"},\"status\":{\"default\":\"\",\"type\":\"string\"},\"transacion-id\":{\"default\":\"ABC-12\",\"type\":\"string\"}},\"type\":\"object\"}}],\"responses\":{\"200\":{\"schema\":{\"properties\":{\"tas_event_id\":{\"default\":\"event-id\",\"type\":\"string\"}},\"type\":\"object\"}}},\"summary\":\"postAudit-safe_POST\"}}},\"swagger\":\"2.0\",\"host\":\"integration.cloud.tibcoapps.com\",\"schemes\":[\"https\"],\"basePath\":\"/gsbc/TIB_SUB_01BB7EMJE7SVVCKZ15RWG95ESF/tci/3jg6d6q2erkkbcu4olocbh6t75b2u7ss\"}}"
+                                    },
+                                    "queryParams": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{}}",
+                                        "fe_metadata": "[]"
+                                    },
+                                    "pathParams": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{}}",
+                                        "fe_metadata": "[]"
+                                    },
+                                    "headers": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{}}",
+                                        "fe_metadata": "[]"
+                                    },
+                                    "body": {
+                                        "type": "json",
+                                        "value": "{\"properties\":{\"audit-event\":{\"default\":\"event\",\"type\":\"string\"},\"event-description\":{\"default\":\"Adherent 123 demande\",\"type\":\"string\"},\"event-source\":{\"default\":\"BPM\",\"type\":\"string\"},\"payload\":{\"default\":\"donnees bruts\",\"type\":\"string\"},\"status\":{\"default\":\"\",\"type\":\"string\"},\"transacion-id\":{\"default\":\"ABC-12\",\"type\":\"string\"}},\"type\":\"object\"}",
+                                        "fe_metadata": "{\"properties\":{\"audit-event\":{\"default\":\"event\",\"type\":\"string\"},\"event-description\":{\"default\":\"Adherent 123 demande\",\"type\":\"string\"},\"event-source\":{\"default\":\"BPM\",\"type\":\"string\"},\"payload\":{\"default\":\"donnees bruts\",\"type\":\"string\"},\"status\":{\"default\":\"\",\"type\":\"string\"},\"transacion-id\":{\"default\":\"ABC-12\",\"type\":\"string\"}},\"type\":\"object\"}"
+                                    }
+                                },
+                                "output": {
+                                    "responseCodes": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"200\":{\"properties\":{\"tas_event_id\":{\"default\":\"event-id\",\"type\":\"string\"}},\"type\":\"object\"}}}",
+                                        "fe_metadata": "{\"type\":\"object\",\"properties\":{\"200\":{\"properties\":{\"tas_event_id\":{\"default\":\"event-id\",\"type\":\"string\"}},\"type\":\"object\"}}}"
+                                    },
+                                    "responseCodesSchema": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"code\":{\"type\":\"number\"},\"responseType\":{\"type\":\"string\"},\"responseSchema\":{\"type\":\"string\"}}}}",
+                                        "fe_metadata": "[{\"code\":200,\"responseType\":\"object\",\"responseSchema\":\"{\\\"properties\\\":{\\\"tas_event_id\\\":{\\\"default\\\":\\\"event-id\\\",\\\"type\\\":\\\"string\\\"}},\\\"type\\\":\\\"object\\\"}\"}]"
+                                    },
+                                    "headers": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"Accept\":{\"type\":\"string\",\"visible\":false},\"Accept-Charset\":{\"type\":\"string\",\"visible\":false},\"Accept-Encoding\":{\"type\":\"string\",\"visible\":false},\"Content-Type\":{\"type\":\"string\",\"visible\":false},\"Content-Length\":{\"type\":\"string\",\"visible\":false},\"Connection\":{\"type\":\"string\",\"visible\":false},\"Cookie\":{\"type\":\"string\",\"visible\":false},\"Pragma\":{\"type\":\"string\",\"visible\":false}},\"required\":[]}",
+                                        "fe_metadata": "[{\"parameterName\":\"Accept\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Accept-Charset\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Accept-Encoding\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Content-Type\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Content-Length\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Connection\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Cookie\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Pragma\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false}]"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "Return",
+                        "name": "Return",
+                        "description": "Simple Return Activity",
+                        "activity": {
+                            "ref": "#actreturn",
+                            "settings": {
+                                "mappings": {
+                                    "responseBody": {
+                                        "mapping": {
+                                            "body": "=$activity[ConfigureHTTPResponse].response.body"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "LogMessage2",
+                        "name": "LogMessage2",
+                        "description": "Simple Log Message Activity",
+                        "activity": {
+                            "ref": "#log",
+                            "input": {
+                                "Log Level": "INFO",
+                                "flowInfo": false,
+                                "message": "Error *********"
+                            }
+                        }
+                    },
+                    {
+                        "id": "Sleep1",
+                        "name": "Sleep1",
+                        "description": "Simple sleep Activity",
+                        "activity": {
+                            "ref": "#sleep",
+                            "input": {
+                                "IntervalTypeSetting": "Millisecond",
+                                "IntervalSetting": 3,
+                                "Interval": 0
+                            }
+                        }
+                    },
+                    {
+                        "id": "LiveAppsGetCase1",
+                        "name": "LiveAppsGetCase1",
+                        "description": "Live Apps Get Case",
+                        "activity": {
+                            "ref": "#get",
+                            "input": {
+                                "applicationId": "2980",
+                                "sandboxId": "3332",
+                                "caseRef": "=$activity[LiveAppsCreateCase].caseRef"
+                            },
+                            "schemas": {
+                                "output": {
+                                    "data": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"properties\":{\"State\":{\"type\":\"string\",\"title\":\"State\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"2\",\"internalName\":\"state\"},\"enum\":[\"Order Processing\",\"Order Delivered\",\"Order Received\"]},\"ProductCode\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Product Code\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"3\",\"internalName\":\"ProductCode\",\"isSummary\":true}},\"Quanity\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Quanity\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"4\",\"internalName\":\"Quanity\",\"isSummary\":true}},\"Address\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Address\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"5\",\"internalName\":\"Address\",\"isSummary\":true}}},\"required\":[\"State\"]}",
+                                        "fe_metadata": "{\"type\":\"object\",\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"properties\":{\"State\":{\"type\":\"string\",\"title\":\"State\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"2\",\"internalName\":\"state\"},\"enum\":[\"Order Processing\",\"Order Delivered\",\"Order Received\"]},\"ProductCode\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Product Code\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"3\",\"internalName\":\"ProductCode\",\"isSummary\":true}},\"Quanity\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Quanity\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"4\",\"internalName\":\"Quanity\",\"isSummary\":true}},\"Address\":{\"type\":\"string\",\"maxLength\":50,\"title\":\"Address\",\"la_metadata\":{\"type\":\"metadata\",\"id\":\"5\",\"internalName\":\"Address\",\"isSummary\":true}}},\"required\":[\"State\"]}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "ConfigureHTTPResponse1",
+                        "name": "ConfigureHTTPResponse1",
+                        "description": "Configure HTTP Response Activity",
+                        "activity": {
+                            "ref": "#httpresponse",
+                            "input": {
+                                "trigger": "",
+                                "responsecode": "200",
+                                "input": {
+                                    "mapping": {
+                                        "body": {
+                                            "CaseReference": "=$activity[LiveAppsCreateCase].caseRef"
+                                        }
+                                    }
+                                }
+                            },
+                            "schemas": {
+                                "input": {
+                                    "input": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"CaseReference\":{\"type\":\"string\",\"default\":\"XXXX\"}}}}}",
+                                        "fe_metadata": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"CaseReference\":{\"type\":\"string\",\"default\":\"XXXX\"}}}}}"
+                                    }
+                                },
+                                "output": {
+                                    "response": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"CaseReference\":{\"type\":\"string\",\"default\":\"XXXX\"}}}}}",
+                                        "fe_metadata": "{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"CaseReference\":{\"type\":\"string\",\"default\":\"XXXX\"}}}}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "Audit_2",
+                        "name": "Audit_2",
+                        "description": "Simple REST Activity",
+                        "settings": {
+                            "retryOnError": {
+                                "count": 0,
+                                "interval": 0
+                            }
+                        },
+                        "activity": {
+                            "ref": "#rest",
+                            "input": {
+                                "enableASR": true,
+                                "serviceName": "tcius-M2pnNmQ2cTJlcmtrYmN1NG9sb2NiaDZ0NzViMnU3c3M",
+                                "resourcePath": "/audit-safe",
+                                "Method": "POST",
+                                "Uri": "/gsbc/TIB_SUB_01BB7EMJE7SVVCKZ15RWG95ESF/tci/3jg6d6q2erkkbcu4olocbh6t75b2u7ss",
+                                "Timeout": 0,
+                                "requestType": "application/json",
+                                "Use certificate for verification": false,
+                                "Server Certificate": "",
+                                "proxy": "",
+                                "host": "",
+                                "body": {
+                                    "mapping": {
+                                        "event-source": "MOBILE APPLICATION",
+                                        "payload": "=string.tostring($flow.body)",
+                                        "status": "INITIATED"
+                                    }
+                                }
+                            },
+                            "output": {
+                                "configureResponseCodes": true,
+                                "responseType": "application/json"
+                            },
+                            "schemas": {
+                                "input": {
+                                    "serviceMetadata": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"serviceId\":{\"type\":\"string\"},\"title\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"lastModifiedTime\":{\"type\":\"number\"},\"swaggerChecksum\":{\"type\":\"string\"},\"assurance\":{\"type\":\"string\"},\"intercom\":{\"type\":\"boolean\"},\"intercomRegion\":{\"type\":\"string\"},\"extAuthz\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}},\"path\":{\"type\":\"string\"},\"baseURL\":{\"type\":\"string\"},\"apiSpec\":{\"type\":\"object\",\"properties\":{\"definitions\":{\"type\":\"object\",\"properties\":{\"schema1\":{\"type\":\"object\",\"properties\":{\"properties\":{\"type\":\"object\",\"properties\":{\"audit-event\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"event-description\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"event-source\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"payload\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"status\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"transacion-id\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}}},\"type\":{\"type\":\"string\"}}},\"schema2\":{\"type\":\"object\",\"properties\":{\"properties\":{\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}}},\"type\":{\"type\":\"string\"}}}}},\"info\":{\"type\":\"object\",\"properties\":{\"description\":{\"type\":\"string\"},\"title\":{\"type\":\"string\"},\"version\":{\"type\":\"string\"}}},\"paths\":{\"type\":\"object\",\"properties\":{\"/audit-safe\":{\"type\":\"object\",\"properties\":{\"post\":{\"type\":\"object\",\"properties\":{\"operationId\":{\"type\":\"string\"},\"parameters\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"description\":{\"type\":\"string\"},\"in\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"required\":{\"type\":\"boolean\"},\"schema\":{\"type\":\"object\",\"properties\":{\"properties\":{\"type\":\"object\",\"properties\":{\"audit-event\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"event-description\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"event-source\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"payload\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"status\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}},\"transacion-id\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}}},\"type\":{\"type\":\"string\"}}}}}},\"responses\":{\"type\":\"object\",\"properties\":{\"200\":{\"type\":\"object\",\"properties\":{\"schema\":{\"type\":\"object\",\"properties\":{\"properties\":{\"type\":\"object\",\"properties\":{\"tas_event_id\":{\"type\":\"object\",\"properties\":{\"default\":{\"type\":\"string\"},\"type\":{\"type\":\"string\"}}}}},\"type\":{\"type\":\"string\"}}}}}}},\"summary\":{\"type\":\"string\"}}}}}}},\"swagger\":{\"type\":\"string\"},\"host\":{\"type\":\"string\"},\"schemes\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}},\"basePath\":{\"type\":\"string\"}}}}}",
+                                        "fe_metadata": "{\"serviceId\":\"tcius-M2pnNmQ2cTJlcmtrYmN1NG9sb2NiaDZ0NzViMnU3c3M\",\"title\":\"AuditSafeAPI\",\"description\":\" \",\"lastModifiedTime\":1595496967292,\"swaggerChecksum\":\"ab5c2ccc5061fddcd40317b807d65f930c9774df5a856d8e125a8a9750036dae\",\"assurance\":\"published\",\"intercom\":true,\"intercomRegion\":\"us-west-2\",\"extAuthz\":[\"tenant-basic\"],\"path\":\"/gsbc/TIB_SUB_01BB7EMJE7SVVCKZ15RWG95ESF/tci/3jg6d6q2erkkbcu4olocbh6t75b2u7ss\",\"baseURL\":\"https://integration.cloud.tibcoapps.com\",\"apiSpec\":{\"definitions\":{\"schema1\":{\"properties\":{\"audit-event\":{\"default\":\"event\",\"type\":\"string\"},\"event-description\":{\"default\":\"Adherent 123 demande\",\"type\":\"string\"},\"event-source\":{\"default\":\"BPM\",\"type\":\"string\"},\"payload\":{\"default\":\"donnees bruts\",\"type\":\"string\"},\"status\":{\"default\":\"\",\"type\":\"string\"},\"transacion-id\":{\"default\":\"ABC-12\",\"type\":\"string\"}},\"type\":\"object\"},\"schema2\":{\"properties\":{\"tas_event_id\":{\"default\":\"event-id\",\"type\":\"string\"}},\"type\":\"object\"}},\"info\":{\"description\":\" \",\"title\":\"AuditSafeAPI\",\"version\":\"1.0.0\"},\"paths\":{\"/audit-safe\":{\"post\":{\"operationId\":\"post_audit-safe\",\"parameters\":[{\"description\":\"request body parameter\",\"in\":\"body\",\"name\":\"body\",\"required\":true,\"schema\":{\"properties\":{\"audit-event\":{\"default\":\"event\",\"type\":\"string\"},\"event-description\":{\"default\":\"Adherent 123 demande\",\"type\":\"string\"},\"event-source\":{\"default\":\"BPM\",\"type\":\"string\"},\"payload\":{\"default\":\"donnees bruts\",\"type\":\"string\"},\"status\":{\"default\":\"\",\"type\":\"string\"},\"transacion-id\":{\"default\":\"ABC-12\",\"type\":\"string\"}},\"type\":\"object\"}}],\"responses\":{\"200\":{\"schema\":{\"properties\":{\"tas_event_id\":{\"default\":\"event-id\",\"type\":\"string\"}},\"type\":\"object\"}}},\"summary\":\"postAudit-safe_POST\"}}},\"swagger\":\"2.0\",\"host\":\"integration.cloud.tibcoapps.com\",\"schemes\":[\"https\"],\"basePath\":\"/gsbc/TIB_SUB_01BB7EMJE7SVVCKZ15RWG95ESF/tci/3jg6d6q2erkkbcu4olocbh6t75b2u7ss\"}}"
+                                    },
+                                    "queryParams": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{}}",
+                                        "fe_metadata": "[]"
+                                    },
+                                    "pathParams": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{}}",
+                                        "fe_metadata": "[]"
+                                    },
+                                    "headers": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{}}",
+                                        "fe_metadata": "[]"
+                                    },
+                                    "body": {
+                                        "type": "json",
+                                        "value": "{\"properties\":{\"audit-event\":{\"default\":\"event\",\"type\":\"string\"},\"event-description\":{\"default\":\"Adherent 123 demande\",\"type\":\"string\"},\"event-source\":{\"default\":\"BPM\",\"type\":\"string\"},\"payload\":{\"default\":\"donnees bruts\",\"type\":\"string\"},\"status\":{\"default\":\"\",\"type\":\"string\"},\"transacion-id\":{\"default\":\"ABC-12\",\"type\":\"string\"}},\"type\":\"object\"}",
+                                        "fe_metadata": "{\"properties\":{\"audit-event\":{\"default\":\"event\",\"type\":\"string\"},\"event-description\":{\"default\":\"Adherent 123 demande\",\"type\":\"string\"},\"event-source\":{\"default\":\"BPM\",\"type\":\"string\"},\"payload\":{\"default\":\"donnees bruts\",\"type\":\"string\"},\"status\":{\"default\":\"\",\"type\":\"string\"},\"transacion-id\":{\"default\":\"ABC-12\",\"type\":\"string\"}},\"type\":\"object\"}"
+                                    }
+                                },
+                                "output": {
+                                    "responseCodes": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"200\":{\"properties\":{\"tas_event_id\":{\"default\":\"event-id\",\"type\":\"string\"}},\"type\":\"object\"}}}",
+                                        "fe_metadata": "{\"type\":\"object\",\"properties\":{\"200\":{\"properties\":{\"tas_event_id\":{\"default\":\"event-id\",\"type\":\"string\"}},\"type\":\"object\"}}}"
+                                    },
+                                    "responseCodesSchema": {
+                                        "type": "json",
+                                        "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"code\":{\"type\":\"number\"},\"responseType\":{\"type\":\"string\"},\"responseSchema\":{\"type\":\"string\"}}}}",
+                                        "fe_metadata": "[{\"code\":200,\"responseType\":\"object\",\"responseSchema\":\"{\\\"properties\\\":{\\\"tas_event_id\\\":{\\\"default\\\":\\\"event-id\\\",\\\"type\\\":\\\"string\\\"}},\\\"type\\\":\\\"object\\\"}\"}]"
+                                    },
+                                    "headers": {
+                                        "type": "json",
+                                        "value": "{\"type\":\"object\",\"properties\":{\"Accept\":{\"type\":\"string\",\"visible\":false},\"Accept-Charset\":{\"type\":\"string\",\"visible\":false},\"Accept-Encoding\":{\"type\":\"string\",\"visible\":false},\"Content-Type\":{\"type\":\"string\",\"visible\":false},\"Content-Length\":{\"type\":\"string\",\"visible\":false},\"Connection\":{\"type\":\"string\",\"visible\":false},\"Cookie\":{\"type\":\"string\",\"visible\":false},\"Pragma\":{\"type\":\"string\",\"visible\":false}},\"required\":[]}",
+                                        "fe_metadata": "[{\"parameterName\":\"Accept\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Accept-Charset\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Accept-Encoding\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Content-Type\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Content-Length\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Connection\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Cookie\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Pragma\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false}]"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "id": "CopyOfReturn",
+                        "name": "CopyOfReturn",
+                        "description": "Simple Return Activity",
+                        "activity": {
+                            "ref": "#actreturn",
+                            "settings": {
+                                "mappings": {
+                                    "responseBody": {
+                                        "mapping": {
+                                            "body": "=$activity[ConfigureHTTPResponse1].response.body"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "metadata": {
+                    "input": [
+                        {
+                            "name": "body",
+                            "type": "object",
+                            "schema": {
+                                "type": "json",
+                                "value": "{\"customerid\":{\"type\":\"string\",\"default\":\"ABC-123-L\"},\"LastName\":{\"type\":\"string\",\"default\":\"Kanaan\"},\"FirstName\":{\"type\":\"string\",\"default\":\"Nadim\"},\"Type Of Accident\":{\"type\":\"string\",\"default\":\"Accident domestique or Accident sportif or Accident de la route\"},\"No of Days\":{\"type\":\"integer\",\"default\":10}}"
+                            }
+                        }
+                    ],
+                    "output": [
+                        {
+                            "name": "code",
+                            "type": "integer"
+                        },
+                        {
+                            "name": "responseBody",
+                            "type": "object",
+                            "schema": {
+                                "type": "json",
+                                "value": "{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}"
+                            }
+                        }
+                    ],
+                    "fe_metadata": {
+                        "input": "{\"type\":\"object\",\"title\":\"ReceiveHTTPMessage\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"customerid\":{\"type\":\"string\",\"default\":\"ABC-123-L\"},\"LastName\":{\"type\":\"string\",\"default\":\"Kanaan\"},\"FirstName\":{\"type\":\"string\",\"default\":\"Nadim\"},\"Type Of Accident\":{\"type\":\"string\",\"default\":\"Accident domestique or Accident sportif or Accident de la route\"},\"No of Days\":{\"type\":\"integer\",\"default\":10}}}}}",
+                        "output": "{\"type\":\"object\",\"title\":\"Inputs\",\"properties\":{\"code\":{\"type\":\"integer\",\"required\":false},\"responseBody\":{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}}},\"required\":[]}"
+                    }
+                },
+                "explicitReply": true
+            }
+        }
+    ],
+    "properties": [],
+    "connections": {},
+    "contrib": "W3sicmVmIjoiZ2l0LnRpYmNvLmNvbS9naXQvcHJvZHVjdC9pcGFhcy93aS1jb250cmliLmdpdC9jb250cmlidXRpb25zL0dlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCJ9LHsicmVmIjoiZW1lYS1zd2ktc3ZuLmVtZWEudGliY28uY29tL3N2bi9BcmllbC90Y2ktbGl2ZWFwcHMvdHJ1bmsvTGl2ZUFwcHMiLCJzM2xvY2F0aW9uIjoiVGliY28vTGl2ZUFwcHMifV0=",
+    "fe_metadata": "UEsDBAoAAAAIAOhcIlGrqSRGFQAAABMAAAAIAAAAYXBwLmpzb26rViopykxPTy1yy8kvL1ayio6tBQBQSwECFAAKAAAACADoXCJRq6kkRhUAAAATAAAACAAAAAAAAAAAAAAAAAAAAAAAYXBwLmpzb25QSwUGAAAAAAEAAQA2AAAAOwAAAAAA"
+}
