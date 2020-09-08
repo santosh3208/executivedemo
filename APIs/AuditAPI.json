@@ -2,12 +2,11 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0",
-    "title": "VYV - Demande Indemnisation",
-    "x-lastModified": "17 June 2020 4:46:09 pm (Central European Summer Time)",
-    "description": "API d'indemnisation"
+    "title": "AuditAPI",
+    "x-lastModified": "2020-07-19T11:38:48.000Z"
   },
   "paths": {
-    "/indemnisation": {
+    "/audit-safe": {
       "post": {
         "produces": [
           "application/json"
@@ -16,11 +15,11 @@
           "200": {
             "description": "Success response",
             "schema": {
-              "$ref": "#/definitions/indemnisation_200"
+              "$ref": "#/definitions/audit_200"
             },
             "examples": {
               "application/json": {
-                "reference-dossier": "XXXX"
+                "tas_event_id": "event-id"
               }
             }
           }
@@ -29,52 +28,57 @@
           {
             "name": "body",
             "in": "body",
-            "description": "Indemnisation payload",
+            "description": "Audit Input",
             "schema": {
-              "$ref": "#/definitions/Indemnisation_in"
+              "$ref": "#/definitions/audit_input"
             }
           }
         ],
-        "operationId": "postIndemnisation",
+        "operationId": "postAudit-safe",
+        "summary": "Audit Safe",
+        "description": "Ajouter une ligne d'audit",
         "consumes": [
           "application/json"
-        ],
-        "summary": "Demande d'indemnisation"
+        ]
       }
     }
   },
   "definitions": {
-    "Indemnisation_in": {
+    "audit_input": {
       "type": "object",
       "properties": {
-        "numero-adherent": {
+        "transacion-id": {
           "type": "string",
-          "default": "ABC-123-L"
+          "default": "ABC-12"
         },
-        "nom": {
+        "audit-event": {
           "type": "string",
-          "default": "Kanaan"
+          "default": "event"
         },
-        "prenom": {
+        "event-description": {
           "type": "string",
-          "default": "Nadim"
+          "default": "Adherent 123 demande"
         },
-        "type-accident": {
+        "event-source": {
           "type": "string",
-          "default": "Accident domestique or Accident sportif or Accident de la route"
+          "default": "BPM"
         },
-        "duree-en-jour": {
-          "type": "integer",
-          "default": 10
+        "payload": {
+          "type": "string",
+          "default": "donnees bruts"
+        },
+        "status": {
+          "type": "string",
+          "default": ""
         }
       }
     },
-    "indemnisation_200": {
+    "audit_200": {
       "type": "object",
       "properties": {
-        "reference-dossier": {
+        "tas_event_id": {
           "type": "string",
-          "default": "XXXX"
+          "default": "event-id"
         }
       }
     }

@@ -2,8 +2,8 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0",
-    "title": "VYV - BPM State",
-    "x-lastModified": "18 June 2020 3:03:11 pm (Central European Summer Time)",
+    "title": "CaseStateAPI",
+    "x-lastModified": "2020-07-19T15:32:08.000Z",
     "description": "Query BPM State"
   },
   "paths": {
@@ -27,7 +27,7 @@
         },
         "parameters": [
           {
-            "name": "reference-dossier",
+            "name": "caseref",
             "in": "query",
             "description": "",
             "required": false,

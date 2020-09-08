@@ -1,0 +1,85 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "CustomerAPI",
+    "x-lastModified": "2020-07-19T18:45:12.000Z"
+  },
+  "paths": {
+    "/customer/{id}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "schema": {
+              "$ref": "#/definitions/oopschema"
+            },
+            "examples": {
+              "application/json": {
+                "CustomerID": "String",
+                " Name ": " String",
+                "Address ": "String",
+                " Mobile": "String",
+                " email ": "String",
+                "Annual_Income": "String"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "type": "string",
+            "format": ""
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string",
+            "format": ""
+          }
+        ],
+        "operationId": "getCustomer_id"
+      }
+    }
+  },
+  "definitions": {
+    "oopschema": {
+      "type": "object",
+      "properties": {
+        "CustomerID": {
+          "type": "string",
+          "default": "String"
+        },
+        " Name ": {
+          "type": "string",
+          "default": " String"
+        },
+        "Address ": {
+          "type": "string",
+          "default": "String"
+        },
+        " Mobile": {
+          "type": "string",
+          "default": "String"
+        },
+        " email ": {
+          "type": "string",
+          "default": "String"
+        },
+        "Annual_Income": {
+          "type": "string",
+          "default": "String"
+        }
+      }
+    }
+  }
+}

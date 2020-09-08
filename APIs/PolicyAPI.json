@@ -1,0 +1,110 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "PolicyAPI",
+    "x-lastModified": "2020-07-19T19:14:22.000Z"
+  },
+  "paths": {
+    "/policy/{customerid}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "schema": {
+              "$ref": "#/definitions/GiveNewSchemaNameHere"
+            },
+            "examples": {
+              "application/json": {
+                "customerid": "String",
+                "policyID": "String",
+                "StartDate": "String",
+                "EndDate": "String",
+                "isactive": true,
+                "Premium": "121"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "type": "string",
+            "format": ""
+          },
+          {
+            "name": "customerid",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string",
+            "format": ""
+          }
+        ],
+        "operationId": "getCustomerPolicy_policyid"
+      }
+    }
+  },
+  "definitions": {
+    "pop": {
+      "type": "object",
+      "properties": {
+        "policyID": {
+          "type": "string",
+          "default": "String"
+        },
+        "StartDate": {
+          "type": "string",
+          "default": "String"
+        },
+        "EndDate": {
+          "type": "string",
+          "default": "String"
+        },
+        "isactive": {
+          "type": "boolean",
+          "default": true
+        },
+        "Premium": {
+          "type": "string",
+          "default": "121"
+        }
+      }
+    },
+    "GiveNewSchemaNameHere": {
+      "type": "object",
+      "properties": {
+        "policyID": {
+          "type": "string",
+          "default": "String"
+        },
+        "StartDate": {
+          "type": "string",
+          "default": "String"
+        },
+        "EndDate": {
+          "type": "string",
+          "default": "String"
+        },
+        "isactive": {
+          "type": "boolean",
+          "default": true
+        },
+        "Premium": {
+          "type": "string",
+          "default": "121"
+        },
+        "maxnoofdays": {
+          "type": "integer",
+          "default": 2
+        }
+      }
+    }
+  }
+}
