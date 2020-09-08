@@ -356,7 +356,7 @@
         {
             "name": "PostgreSQL.PG.Password",
             "type": "string",
-            "value": "SECRET:Bw7+efUEcEmt6ZkazlXif3+4kSLUUHoZ"
+            "value": "SECRET:KPtEmPAIZxdYJAox2N5G5wuPcq+VFQw5"
         }
     ],
     "connections": {
@@ -376,5 +376,5 @@
         }
     },
     "contrib": "W3sicmVmIjoiZ2l0LnRpYmNvLmNvbS9naXQvcHJvZHVjdC9pcGFhcy93aS1jb250cmliLmdpdC9jb250cmlidXRpb25zL0dlbmVyYWwiLCJzM2xvY2F0aW9uIjoiVGliY28vR2VuZXJhbCJ9LHsicmVmIjoiZ2l0LnRpYmNvLmNvbS9naXQvcHJvZHVjdC9pcGFhcy93aS1wb3N0Z3Jlcy5naXQvc3JjL2FwcC9Qb3N0Z3JlU1FMIiwiczNsb2NhdGlvbiI6IlRpYmNvL1Bvc3RncmVTUUwifV0=",
-    "fe_metadata": "UEsDBAoAAAAIAOdbIlGrqSRGFQAAABMAAAAIAAAAYXBwLmpzb26rViopykxPTy1yy8kvL1ayio6tBQBQSwECFAAKAAAACADnWyJRq6kkRhUAAAATAAAACAAAAAAAAAAAAAAAAAAAAAAAYXBwLmpzb25QSwUGAAAAAAEAAQA2AAAAOwAAAAAA"
+    "fe_metadata": "UEsDBAoAAAAIAJ10KFGrqSRGFQAAABMAAAAIAAAAYXBwLmpzb26rViopykxPTy1yy8kvL1ayio6tBQBQSwECFAAKAAAACACddChRq6kkRhUAAAATAAAACAAAAAAAAAAAAAAAAAAAAAAAYXBwLmpzb25QSwUGAAAAAAEAAQA2AAAAOwAAAAAA"
 }
