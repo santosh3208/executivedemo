@@ -1,16 +1,20 @@
 # Insurance Claim App
 
-A new Flutter application.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+    1. Install Flutter SDK depending on the OS you are using: https://flutter.dev/docs/get-started/install
 
-A few resources to get you started if this is your first Flutter project:
+    2. Set up Flutter with web support: https://flutter.dev/docs/get-started/web
+        2.1 flutter channel beta
+        2.2 flutter upgrade
+        2.3 flutter config --enable-web
+        2.4 flutter devices
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+    3.  clone this repo
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+    4. cd executivedemo\Mobile App
+
+    5. flutter run -d web-server --web-port=33051
+
+    6. Open a browser and use the URL : http://localhost:33051
+
