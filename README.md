@@ -8,9 +8,9 @@ How to Guide
 Pre-requisites 
 
 1. Create Database
-	• \nCreate a PostgreSQL database and make sure you can connect the database from TCI 
-	• \nImport sql script given in the scripts folder into your database.
-	• \nCreate Connection to your database from TCI.
+	• Create a PostgreSQL database and make sure you can connect the database from TCI <br />
+	• Import sql script given in the scripts folder into your database. <br />
+	• Create Connection to your database from TCI. <br />
 
 
 2. Salesforce account 
