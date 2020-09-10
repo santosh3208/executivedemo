@@ -19,9 +19,9 @@ Pre-requisites 
   https://salesforce.vidyard.com/watch/y22hvtDSEpUKKPPUYGC1TX
 • Once the custom fields are created, select app- marketing, and create a new contact.
   ![](images/Sf1.JPG)
+	
 	![](images/Sf2.JPG)
 	
 
 • Fill First name, Last name, mobile, email ,CustomerID, AnnualIncome, Mailing City, and mailing Country fields.
-       
    ![](images/Sf3.JPG)
