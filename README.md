@@ -1,4 +1,4 @@
-﻿Executive Demo: 
+*Executive Demo*
 
 
 
@@ -7,7 +7,7 @@ How to Guide
 
 Pre-requisites 
 
-1. Create Database 
+1. Create Database
 • Create a PostgreSQL database and make sure you can connect the database from TCI 
 • Import sql script given in the scripts folder into your database.
 • Create Connection to your database from TCI.
