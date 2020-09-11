@@ -23,9 +23,14 @@ Pre-requisites 
 
 	• Go to cloud.tibco.com and log in to your account <br />
 	   ![](images/TC1.JPG)
-	• Select . <br />
-	• Create Connection to your database from TCI. <br />
-
+	• Select Integration tile and click on Integration apps <br />
+	   ![](images/TC2.JPG)
+	   ![](images/TC3.JPG)
+	• Create Connection to your PostgreSQL database from TCI. <br />
+          ![](images/TC4.JPG) ![](images/TC5.JPG) ![](images/TC6.JPG)
+	  
+	• Create Connection to your Sa;esforce account from TCI. <br />
+	  ![](images/TC7.JPG) ![](images/TC8.JPG)
 Demo 
 
 1 API Specifications 
