@@ -10,12 +10,12 @@ This application sends audit information to TIBCO Auditsafe.This is an add-on if
       APPROVAL  <br/>    
       CLAIM      <br/>   
       COMPENSATION <br/>  
-    ![](../../images/TC36.JPG)
+  
     <b> Audit Status</b> <br/>          
       IN PROGRESS  <br/>        
       SUCCESS   <br/>       
       ERROR<br/>   
- 
+ ![](../../images/TC36.JPG)
   ![](../../images/TC37.JPG)
   
 
